@@ -66,41 +66,43 @@ public function store(Request $request)
 }
 
 
-    // Atualizar um blog existente
-    public function update(Request $request, $id)
-    {
-        $blog = Blog::find($id);
+public function update(Request $request, $id)
+{
+    // Encontra o blog
+    $blog = Blog::find($id);
     
-        if (!$blog) {
-            return response()->json(['message' => 'Blog não encontrado'], 404);
-        }
-    
-        // Validar os dados
-        $validator = Validator::make($request->all(), [
-            'titulo' => 'nullable|string|max:255',
-            'conteudo' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'data_publicacao' => 'nullable|date', // Validar se data_publicacao for fornecida
-            'autor' => 'nullable|string|max:255', // Validar se o autor for fornecido
-        ]);
-    
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-    
-        // Atualizar os campos
-        $blogData = $request->only(['titulo', 'conteudo', 'data_publicacao', 'autor']);
-    
-        if ($request->hasFile('foto')) {
-            // Se houver uma foto, salva e atualiza o campo
-            $fotoPath = $request->file('foto')->store('blogs', 'public');
-            $blogData['foto'] = $fotoPath;
-        }
-    
-        $blog->update($blogData);
-    
-        return response()->json($blog);
+    if (!$blog) {
+        return response()->json(['message' => 'Blog não encontrado'], 404);
     }
+
+    // Validar os dados
+    $validator = Validator::make($request->all(), [
+        'titulo' => 'nullable|string|max:255',
+        'conteudo' => 'nullable|string',
+        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'data_publicacao' => 'nullable|date',
+        'autor' => 'nullable|string|max:255',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json($validator->errors(), 422);
+    }
+
+    // Atualizar os campos
+    $blogData = $request->only(['titulo', 'conteudo', 'data_publicacao', 'autor']);
+    
+    if ($request->hasFile('foto')) {
+        // Se houver uma foto, salva e atualiza o campo
+        $fotoPath = $request->file('foto')->store('blogs', 'public');
+        $blogData['foto'] = $fotoPath;
+    }
+
+    // Atualiza o blog com os novos dados
+    $blog->update($blogData);
+
+    return response()->json($blog);
+}
+
     
     // Excluir um blog
     public function destroy($id)
