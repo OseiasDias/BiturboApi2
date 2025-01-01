@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EquipeSuporteController;
 use App\Http\Controllers\BlogController;
-
+use App\Http\Controllers\DistribuidorController;
 
 /*
 
@@ -32,4 +32,13 @@ Route::post('blogs', [BlogController::class, 'store']); // Criar um novo blog
 Route::put('blogs/{id}', [BlogController::class, 'update']); // Atualizar um blog
 Route::delete('blogs/{id}', [BlogController::class, 'destroy']); // Excluir um blog
 
+//Routes do fornecedor
 
+
+
+
+Route::get('distribuidores', [DistribuidorController::class, 'index']); // Para listar todos os distribuidores
+Route::get('distribuidores/{id}', [DistribuidorController::class, 'show']); // Para mostrar um único distribuidor
+Route::post('distribuidores', [DistribuidorController::class, 'store']); // Para criar um novo distribuidor
+Route::put('distribuidores/{id}', [DistribuidorController::class, 'update']); // Para atualizar um distribuidor
+Route::delete('distribuidores/{id}', [DistribuidorController::class, 'destroy']); // Para deletar um distribuidor
