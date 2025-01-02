@@ -95,12 +95,12 @@ class EquipeSuporteController extends Controller
     {
         // Buscar a equipe pelo ID
         $equipe = EquipeSuporte::find($id);
-
+    
         // Verificar se a equipe foi encontrada
         if (!$equipe) {
             return response()->json(['message' => 'Equipe não encontrada'], 404);
         }
-
+    
         // Validação dos dados recebidos
         $validator = Validator::make($request->all(), [
             'nome' => 'nullable|string|max:255',
@@ -121,26 +121,31 @@ class EquipeSuporteController extends Controller
             'municipio' => 'nullable|string|max:255',
             'endereco' => 'nullable|string|max:500',
         ]);
-
+    
         // Verificar se a validação falhou
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
-
+    
         // Atualizar os dados
         $equipe->fill($request->all());
-
+    
         // Se a senha foi fornecida, criptografá-la
         if ($request->has('senha')) {
             $equipe->senha = Hash::make($request->senha);
         }
-
+    
+        // Se o genero foi passado como 0 ou 1, converter para 'masculino' ou 'feminino'
+        if (isset($request->genero)) {
+            $equipe->genero = $request->genero == '0' ? 'masculino' : 'feminino';
+        }
+    
         $equipe->save();
-
+    
         // Retornar o registro atualizado
         return response()->json($equipe);
     }
-
+    
     /**
      * Excluir um registro de equipe de suporte.
      *

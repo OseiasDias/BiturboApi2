@@ -32,6 +32,8 @@ Route::post('blogs', [BlogController::class, 'store']); // Criar um novo blog
 Route::put('blogs/{id}', [BlogController::class, 'update']); // Atualizar um blog
 Route::delete('blogs/{id}', [BlogController::class, 'destroy']); // Excluir um blog
 
+
+
 //Routes do fornecedor
 
 
@@ -40,5 +42,5 @@ Route::delete('blogs/{id}', [BlogController::class, 'destroy']); // Excluir um b
 Route::get('distribuidores', [DistribuidorController::class, 'index']); // Para listar todos os distribuidores
 Route::get('distribuidores/{id}', [DistribuidorController::class, 'show']); // Para mostrar um único distribuidor
 Route::post('distribuidores', [DistribuidorController::class, 'store']); // Para criar um novo distribuidor
-Route::put('distribuidores/{id}', [DistribuidorController::class, 'update']); // Para atualizar um distribuidor
+Route::put('distribuidores/{id}', [DistribuidorController::class, 'update']);
 Route::delete('distribuidores/{id}', [DistribuidorController::class, 'destroy']); // Para deletar um distribuidor

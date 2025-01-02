@@ -36,8 +36,8 @@ class DistribuidorController extends Controller
             'primeiro_nome' => 'required|string|max:50',
             'ultimo_nome' => 'required|string|max:50',
             'nome_empresa' => 'required|string|max:100',
-            'email' => 'required|email|max:50|unique:distribuidores',
-            'celular' => 'required|string|max:16|unique:distribuidores',
+            'email' => 'required|email|max:50|unique:distribuidores,email',
+            'celular' => 'required|string|max:16|unique:distribuidores,celular',
             'telefone_fixo' => 'nullable|string|max:16',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'genero' => 'nullable|string|in:Masculino,Feminino',
@@ -48,7 +48,7 @@ class DistribuidorController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
     
         // Preparar dados para inserção
@@ -60,6 +60,7 @@ class DistribuidorController extends Controller
     
         // Se uma imagem for enviada
         if ($request->hasFile('imagem')) {
+            // Armazenar a imagem e adicionar o caminho
             $imagemPath = $request->file('imagem')->store('distribuidores', 'public');
             $distribuidorData['imagem'] = $imagemPath;
         }
@@ -69,10 +70,12 @@ class DistribuidorController extends Controller
     
         return response()->json($distribuidor, 201);
     }
+    
 
     // Atualizar distribuidor
     public function update(Request $request, $id)
     {
+        // Encontrar o distribuidor
         $distribuidor = Distribuidor::find($id);
     
         if (!$distribuidor) {
@@ -96,22 +99,24 @@ class DistribuidorController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return response()->json(['errors' => $validator->errors()], 422);
         }
     
-        // Atualizar dados
+        // Preparar os dados para atualização
         $distribuidorData = $request->only([
             'primeiro_nome', 'ultimo_nome', 'nome_empresa', 'email', 
             'celular', 'telefone_fixo', 'genero', 'pais', 'estado', 
             'municipio', 'endereco'
         ]);
     
-        // Se uma imagem foi enviada, armazenar
+        // Se uma nova imagem for enviada, tratar a substituição da imagem
         if ($request->hasFile('imagem')) {
+            // Deletar imagem antiga, se houver
             if ($distribuidor->imagem) {
                 Storage::disk('public')->delete($distribuidor->imagem);
             }
     
+            // Armazenar a nova imagem e adicionar ao array de dados
             $imagemPath = $request->file('imagem')->store('distribuidores', 'public');
             $distribuidorData['imagem'] = $imagemPath;
         }
@@ -121,6 +126,7 @@ class DistribuidorController extends Controller
     
         return response()->json($distribuidor);
     }
+    
 
     // Excluir distribuidor
     public function destroy($id)
