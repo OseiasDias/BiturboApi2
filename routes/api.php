@@ -7,8 +7,11 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\DistribuidorController;
 use App\Http\Controllers\ClienteController;
-
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\CompraController;
+
+
+
 
 /*
 
@@ -84,3 +87,14 @@ Route::prefix('produtos')->group(function () {
     Route::put('{id}', [ProdutoController::class, 'update']); // Atualiza produto
     Route::delete('{id}', [ProdutoController::class, 'destroy']); // Deleta produto
 });
+
+
+//// Routes para compras
+
+
+Route::get('compras', [CompraController::class, 'index']); // Listar todas as compras
+Route::post('compras', [CompraController::class, 'store']); // Criar uma nova compra
+Route::get('compras/{id}', [CompraController::class, 'show']); // Mostrar uma compra específica
+Route::put('compras/{id}', [CompraController::class, 'update']); // Atualizar uma compra específica
+Route::delete('compras/{id}', [CompraController::class, 'destroy']); // Deletar uma compra específica
+

@@ -2,72 +2,85 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Produto;
+use App\Models\Compra;
 use Illuminate\Http\Request;
 
-class ProdutoController extends Controller
+class CompraController extends Controller
 {
-    // Exibir lista de produtos
+    // Exibir lista de compras
     public function index()
     {
-        $produtos = Produto::all();
-        return response()->json($produtos);
+        $compras = Compra::all();
+        return response()->json($compras);
     }
 
-    // Criar novo produto
+    // Criar nova compra
     public function store(Request $request)
     {
+        // Validação dos dados
         $request->validate([
-            'numero_produto' => 'required|unique:produtos',
+            'numero_compra' => 'required|unique:compras',
             'data_compra' => 'required|date',
-            'nome' => 'required|max:255',
-            'preco' => 'required|numeric',
-            'unidade_medida' => 'required',
-            'fornecedor' => 'required',
+            'fornecedor' => 'required|exists:fornecedores,id',
+            'celular' => 'required|string',
+            'email' => 'required|email',
+            'endereco' => 'required|string',
+            'galho' => 'required|string'
         ]);
 
-        $produto = Produto::create($request->all());
+        // Criação da nova compra
+        $compra = Compra::create([
+            'numero_compra' => $request->numero_compra,
+            'data_compra' => $request->data_compra,
+            'fornecedor_id' => $request->fornecedor,
+            'celular' => $request->celular,
+            'email' => $request->email,
+            'endereco' => $request->endereco,
+            'galho' => $request->galho,
+        ]);
 
-        return response()->json($produto, 201);
+        // Retorna a compra criada com status 201 (criado)
+        return response()->json($compra, 201);
     }
 
-    // Exibir produto específico
+    // Exibir compra específica
     public function show($id)
     {
-        $produto = Produto::find($id);
+        $compra = Compra::find($id);
 
-        if (!$produto) {
-            return response()->json(['message' => 'Produto não encontrado'], 404);
+        if (!$compra) {
+            return response()->json(['message' => 'Compra não encontrada'], 404);
         }
 
-        return response()->json($produto);
+        return response()->json($compra);
     }
 
-    // Atualizar produto
+    // Atualizar dados da compra
     public function update(Request $request, $id)
     {
-        $produto = Produto::find($id);
+        $compra = Compra::find($id);
 
-        if (!$produto) {
-            return response()->json(['message' => 'Produto não encontrado'], 404);
+        if (!$compra) {
+            return response()->json(['message' => 'Compra não encontrada'], 404);
         }
 
-        $produto->update($request->all());
+        // Atualiza os dados da compra
+        $compra->update($request->all());
 
-        return response()->json($produto);
+        return response()->json($compra);
     }
 
-    // Deletar produto
+    // Deletar compra
     public function destroy($id)
     {
-        $produto = Produto::find($id);
+        $compra = Compra::find($id);
 
-        if (!$produto) {
-            return response()->json(['message' => 'Produto não encontrado'], 404);
+        if (!$compra) {
+            return response()->json(['message' => 'Compra não encontrada'], 404);
         }
 
-        $produto->delete();
+        $compra->delete();
 
-        return response()->json(['message' => 'Produto deletado com sucesso']);
+        return response()->json(['message' => 'Compra deletada com sucesso']);
     }
 }
