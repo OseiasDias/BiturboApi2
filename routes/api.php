@@ -8,6 +8,8 @@ use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\DistribuidorController;
 use App\Http\Controllers\ClienteController;
 
+use App\Http\Controllers\ProdutoController;
+
 /*
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -70,3 +72,15 @@ Route::get('clientes/{id}', [ClienteController::class, 'show']);
 Route::post('clientes', [ClienteController::class, 'store']);
 Route::put('clientes/{id}', [ClienteController::class, 'update']);
 Route::delete('clientes/{id}', [ClienteController::class, 'destroy']);
+
+
+//Routes Produtos
+
+
+Route::prefix('produtos')->group(function () {
+    Route::get('/', [ProdutoController::class, 'index']);  // Lista produtos
+    Route::post('/', [ProdutoController::class, 'store']); // Cria novo produto
+    Route::get('{id}', [ProdutoController::class, 'show']);  // Exibe produto
+    Route::put('{id}', [ProdutoController::class, 'update']); // Atualiza produto
+    Route::delete('{id}', [ProdutoController::class, 'destroy']); // Deleta produto
+});
