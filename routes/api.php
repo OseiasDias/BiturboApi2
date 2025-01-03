@@ -6,6 +6,7 @@ use App\Http\Controllers\EquipeSuporteController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\DistribuidorController;
+use App\Http\Controllers\ClienteController;
 
 /*
 
@@ -57,3 +58,15 @@ Route::get('funcionarios/{id}', [FuncionarioController::class, 'show']);
 Route::post('funcionarios', [FuncionarioController::class, 'store']);
 Route::put('funcionarios/{id}', [FuncionarioController::class, 'update']);
 Route::delete('funcionarios/{id}', [FuncionarioController::class, 'destroy']);
+
+
+//ROutes para Clientes
+
+
+
+
+Route::get('clientes', [ClienteController::class, 'index']);
+Route::get('clientes/{id}', [ClienteController::class, 'show']);
+Route::post('clientes', [ClienteController::class, 'store']);
+Route::put('clientes/{id}', [ClienteController::class, 'update']);
+Route::delete('clientes/{id}', [ClienteController::class, 'destroy']);
