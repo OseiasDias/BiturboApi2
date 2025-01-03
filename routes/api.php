@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EquipeSuporteController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\DistribuidorController;
 
 /*
@@ -44,3 +45,15 @@ Route::get('distribuidores/{id}', [DistribuidorController::class, 'show']); // P
 Route::post('distribuidores', [DistribuidorController::class, 'store']); // Para criar um novo distribuidor
 Route::put('distribuidores/{id}', [DistribuidorController::class, 'update']);
 Route::delete('distribuidores/{id}', [DistribuidorController::class, 'destroy']); // Para deletar um distribuidor
+
+
+//Routes para funcionarios
+
+// routes/api.php (para APIs)
+
+
+Route::get('funcionarios', [FuncionarioController::class, 'index']);
+Route::get('funcionarios/{id}', [FuncionarioController::class, 'show']);
+Route::post('funcionarios', [FuncionarioController::class, 'store']);
+Route::put('funcionarios/{id}', [FuncionarioController::class, 'update']);
+Route::delete('funcionarios/{id}', [FuncionarioController::class, 'destroy']);

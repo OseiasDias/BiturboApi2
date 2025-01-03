@@ -107,7 +107,7 @@ class EquipeSuporteController extends Controller
             'sobrenome' => 'nullable|string|max:255',
             'data_nascimento' => 'nullable|date',
             'email' => 'nullable|email|unique:equipe_suporte,email,' . $id,
-            'foto' => 'nullable|image',
+            'foto' => 'nullable|string|url',
             'genero' => 'nullable|in:masculino,feminino',
             'senha' => 'nullable|string|min:8',
             'celular' => 'nullable|string|unique:equipe_suporte,celular,' . $id,

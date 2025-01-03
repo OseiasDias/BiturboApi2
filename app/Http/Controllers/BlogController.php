@@ -38,7 +38,7 @@ public function store(Request $request)
     $validator = Validator::make($request->all(), [
         'titulo' => 'required|string|max:255',
         'conteudo' => 'required|string',
-        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validação da foto
+        'foto' => 'nullable|string|url',// Validação da foto
         'data_publicacao' => 'required|date', // Validação da data de publicação
         'autor' => 'required|string|max:255', // Validação do autor
     ]);
@@ -79,7 +79,8 @@ public function update(Request $request, $id)
     $validator = Validator::make($request->all(), [
         'titulo' => 'nullable|string|max:255',
         'conteudo' => 'nullable|string',
-        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'foto' => 'nullable|string|url',
+        //'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         'data_publicacao' => 'nullable|date',
         'autor' => 'nullable|string|max:255',
     ]);
