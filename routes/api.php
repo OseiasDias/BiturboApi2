@@ -12,6 +12,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\TipoVeiculoController;
 use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\CorController;
 
 
 
@@ -139,3 +140,23 @@ Route::post('/marcas', [MarcaController::class, 'store'])->name('marcas.store');
 Route::get('/marcas/{id}', [MarcaController::class, 'show'])->name('marcas.show'); // Mostrar uma marca específica
 Route::put('/marcas/{id}', [MarcaController::class, 'update'])->name('marcas.update'); // Atualizar uma marca específica
 Route::delete('/marcas/{id}', [MarcaController::class, 'destroy'])->name('marcas.destroy'); // Deletar uma marca específica
+
+
+//Routes cores
+
+Route::prefix('cores')->group(function () {
+    // Rota para listar todas as cores
+    Route::get('/', [CorController::class, 'index']);
+
+    // Rota para criar uma nova cor
+    Route::post('/', [CorController::class, 'store']);
+
+    // Rota para mostrar uma cor específica pelo ID
+    Route::get('{id}', [CorController::class, 'show']);
+
+    // Rota para atualizar uma cor específica pelo ID
+    Route::put('{id}', [CorController::class, 'update']);
+
+    // Rota para deletar uma cor específica pelo ID
+    Route::delete('{id}', [CorController::class, 'destroy']);
+});
