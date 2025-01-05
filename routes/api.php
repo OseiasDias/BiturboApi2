@@ -10,6 +10,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\VeiculoController;
+use App\Http\Controllers\TipoVeiculoController;
 
 
 
@@ -108,4 +109,19 @@ Route::prefix('veiculos')->group(function () {
     Route::post('/', [VeiculoController::class, 'store']);
     Route::put('/{id}', [VeiculoController::class, 'update']);
     Route::delete('/{id}', [VeiculoController::class, 'destroy']);
+});
+
+
+//Routes tipo de veiculos
+
+// routes/api.php
+
+
+
+Route::prefix('tipos-veiculos')->group(function () {
+    Route::get('/', [TipoVeiculoController::class, 'index']); // Listar todos os tipos
+    Route::post('/', [TipoVeiculoController::class, 'store']); // Criar um novo tipo de veículo
+    Route::get('{id}', [TipoVeiculoController::class, 'show']); // Exibir um tipo de veículo específico
+    Route::put('{id}', [TipoVeiculoController::class, 'update']); // Atualizar um tipo de veículo
+    Route::delete('{id}', [TipoVeiculoController::class, 'destroy']); // Excluir um tipo de veículo
 });
