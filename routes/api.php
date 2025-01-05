@@ -9,6 +9,7 @@ use App\Http\Controllers\DistribuidorController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\CompraController;
+use App\Http\Controllers\VeiculoController;
 
 
 
@@ -98,3 +99,13 @@ Route::get('compras/{id}', [CompraController::class, 'show']); // Mostrar uma co
 Route::put('compras/{id}', [CompraController::class, 'update']); // Atualizar uma compra específica
 Route::delete('compras/{id}', [CompraController::class, 'destroy']); // Deletar uma compra específica
 
+
+//ROUtes veiculos
+
+Route::prefix('veiculos')->group(function () {
+    Route::get('/', [VeiculoController::class, 'index']);
+    Route::get('/{id}', [VeiculoController::class, 'show']);
+    Route::post('/', [VeiculoController::class, 'store']);
+    Route::put('/{id}', [VeiculoController::class, 'update']);
+    Route::delete('/{id}', [VeiculoController::class, 'destroy']);
+});
