@@ -14,6 +14,7 @@ use App\Http\Controllers\TipoVeiculoController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\CorController;
 use App\Http\Controllers\OrdemDeServicoController;
+use App\Http\Controllers\FacturaController;
 
 
 
@@ -172,3 +173,22 @@ Route::get('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'show']);
 Route::post('ordens-de-servico', [OrdemDeServicoController::class, 'store']);
 Route::put('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'update']);
 Route::delete('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'destroy']);
+
+//Faturas Routes
+
+Route::prefix('facturas')->group(function () {
+    // Lista todas as faturas
+    Route::get('/', [FacturaController::class, 'index']);
+    
+    // Exibe uma fatura específica
+    Route::get('{id}', [FacturaController::class, 'show']);
+    
+    // Cria uma nova fatura
+    Route::post('/', [FacturaController::class, 'store']);
+    
+    // Atualiza uma fatura existente
+    Route::put('{id}', [FacturaController::class, 'update']);
+    
+    // Deleta uma fatura
+    Route::delete('{id}', [FacturaController::class, 'destroy']);
+});
