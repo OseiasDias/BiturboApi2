@@ -11,6 +11,7 @@ use App\Http\Controllers\ProdutoController;
 use App\Http\Controllers\CompraController;
 use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\TipoVeiculoController;
+use App\Http\Controllers\MarcaController;
 
 
 
@@ -125,3 +126,16 @@ Route::prefix('tipos-veiculos')->group(function () {
     Route::put('{id}', [TipoVeiculoController::class, 'update']); // Atualizar um tipo de veículo
     Route::delete('{id}', [TipoVeiculoController::class, 'destroy']); // Excluir um tipo de veículo
 });
+
+
+
+//Route Marcas
+
+
+
+// Rotas para a entidade Marca
+Route::get('/marcas', [MarcaController::class, 'index'])->name('marcas.index'); // Listar todas as marcas
+Route::post('/marcas', [MarcaController::class, 'store'])->name('marcas.store'); // Criar uma nova marca
+Route::get('/marcas/{id}', [MarcaController::class, 'show'])->name('marcas.show'); // Mostrar uma marca específica
+Route::put('/marcas/{id}', [MarcaController::class, 'update'])->name('marcas.update'); // Atualizar uma marca específica
+Route::delete('/marcas/{id}', [MarcaController::class, 'destroy'])->name('marcas.destroy'); // Deletar uma marca específica
