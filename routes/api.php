@@ -204,3 +204,17 @@ Route::prefix('gatepasses')->group(function() {
     Route::delete('{id}', [GatepassController::class, 'destroy']);
 });
 
+
+
+//Routes taxas
+
+use App\Http\Controllers\TaxaController;
+
+Route::prefix('taxas')->group(function () {
+    Route::get('/', [TaxaController::class, 'index']);
+    Route::post('/', [TaxaController::class, 'store']);
+    Route::get('{id}', [TaxaController::class, 'show']);
+    Route::put('{id}', [TaxaController::class, 'update']);
+    Route::delete('{id}', [TaxaController::class, 'destroy']);
+});
+
