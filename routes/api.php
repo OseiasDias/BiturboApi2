@@ -20,6 +20,7 @@ use App\Http\Controllers\TaxaController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\RendaController;
 use App\Http\Controllers\DespesaController;
+use App\Http\Controllers\ServicoController;
 
 
 
@@ -262,4 +263,17 @@ Route::prefix('despesas')->group(function () {
     Route::get('{id}', [DespesaController::class, 'show']);  // Exibir uma despesa específica
     Route::put('{id}', [DespesaController::class, 'update']); // Atualizar uma despesa
     Route::delete('{id}', [DespesaController::class, 'destroy']); // Deletar uma despesa
+});
+
+
+//Routes servicos
+
+
+
+Route::prefix('servicos')->group(function () {
+    Route::get('/', [ServicoController::class, 'index']);  // Listar todos os serviços
+    Route::post('/', [ServicoController::class, 'store']); // Criar um novo serviço
+    Route::get('{id}', [ServicoController::class, 'show']);  // Exibir um serviço específico
+    Route::put('{id}', [ServicoController::class, 'update']); // Atualizar um serviço
+    Route::delete('{id}', [ServicoController::class, 'destroy']); // Deletar um serviço
 });
