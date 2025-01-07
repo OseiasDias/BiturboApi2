@@ -23,6 +23,7 @@ use App\Http\Controllers\DespesaController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\FilialController;
 use App\Http\Controllers\AgendamentoController;
+use App\Http\Controllers\UnidadeMedidaController;
 
 
 
@@ -309,4 +310,17 @@ Route::prefix('agendamentos')->group(function () {
     Route::get('{id}', [AgendamentoController::class, 'show']); // Exibir um agendamento específico
     Route::put('{id}', [AgendamentoController::class, 'update']); // Atualizar um agendamento
     Route::delete('{id}', [AgendamentoController::class, 'destroy']); // Deletar um agendamento
+});
+
+
+//Routes Unidade de medida
+
+
+
+Route::prefix('unidade-medidas')->group(function () {
+    Route::get('/', [UnidadeMedidaController::class, 'index']);  // Listar todas as unidades
+    Route::post('/', [UnidadeMedidaController::class, 'store']); // Criar uma nova unidade
+    Route::get('{id}', [UnidadeMedidaController::class, 'show']); // Exibir uma unidade específica
+    Route::put('{id}', [UnidadeMedidaController::class, 'update']); // Atualizar uma unidade
+    Route::delete('{id}', [UnidadeMedidaController::class, 'destroy']); // Deletar uma unidade
 });
