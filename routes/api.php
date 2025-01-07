@@ -16,6 +16,8 @@ use App\Http\Controllers\CorController;
 use App\Http\Controllers\OrdemDeServicoController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\GatepassController;
+use App\Http\Controllers\TaxaController;
+use App\Http\Controllers\PaymentMethodController;
 
 
 
@@ -208,8 +210,6 @@ Route::prefix('gatepasses')->group(function() {
 
 //Routes taxas
 
-use App\Http\Controllers\TaxaController;
-
 Route::prefix('taxas')->group(function () {
     Route::get('/', [TaxaController::class, 'index']);
     Route::post('/', [TaxaController::class, 'store']);
@@ -217,4 +217,17 @@ Route::prefix('taxas')->group(function () {
     Route::put('{id}', [TaxaController::class, 'update']);
     Route::delete('{id}', [TaxaController::class, 'destroy']);
 });
+
+
+//Routes metodo de pagamentos
+
+
+
+
+// Rotas para CRUD de métodos de pagamento
+Route::get('payment-methods', [PaymentMethodController::class, 'index']);         // Listar todos
+Route::get('payment-methods/{id}', [PaymentMethodController::class, 'show']);     // Exibir um único
+Route::post('payment-methods', [PaymentMethodController::class, 'store']);        // Criar novo
+Route::put('payment-methods/{id}', [PaymentMethodController::class, 'update']);   // Atualizar
+Route::delete('payment-methods/{id}', [PaymentMethodController::class, 'destroy']); // Excluir
 
