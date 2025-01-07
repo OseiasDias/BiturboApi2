@@ -22,6 +22,7 @@ use App\Http\Controllers\RendaController;
 use App\Http\Controllers\DespesaController;
 use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\FilialController;
+use App\Http\Controllers\AgendamentoController;
 
 
 
@@ -289,4 +290,23 @@ Route::prefix('filiais')->group(function () {
     Route::get('{id}', [FilialController::class, 'show']); // Exibir uma filial específica
     Route::put('{id}', [FilialController::class, 'update']); // Atualizar uma filial
     Route::delete('{id}', [FilialController::class, 'destroy']); // Deletar uma filial
+});
+
+
+//Routes Agendamentos
+
+// routes/api.php
+
+
+
+// routes/api.php
+
+
+
+Route::prefix('agendamentos')->group(function () {
+    Route::get('/', [AgendamentoController::class, 'index']);  // Listar todos os agendamentos
+    Route::post('/', [AgendamentoController::class, 'store']); // Criar um novo agendamento
+    Route::get('{id}', [AgendamentoController::class, 'show']); // Exibir um agendamento específico
+    Route::put('{id}', [AgendamentoController::class, 'update']); // Atualizar um agendamento
+    Route::delete('{id}', [AgendamentoController::class, 'destroy']); // Deletar um agendamento
 });
