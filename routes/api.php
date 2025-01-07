@@ -21,6 +21,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\RendaController;
 use App\Http\Controllers\DespesaController;
 use App\Http\Controllers\ServicoController;
+use App\Http\Controllers\FilialController;
 
 
 
@@ -276,4 +277,16 @@ Route::prefix('servicos')->group(function () {
     Route::get('{id}', [ServicoController::class, 'show']);  // Exibir um serviço específico
     Route::put('{id}', [ServicoController::class, 'update']); // Atualizar um serviço
     Route::delete('{id}', [ServicoController::class, 'destroy']); // Deletar um serviço
+});
+
+
+
+//Route Fialial
+
+Route::prefix('filiais')->group(function () {
+    Route::get('/', [FilialController::class, 'index']);  // Listar todas as filiais
+    Route::post('/', [FilialController::class, 'store']); // Criar uma nova filial
+    Route::get('{id}', [FilialController::class, 'show']); // Exibir uma filial específica
+    Route::put('{id}', [FilialController::class, 'update']); // Atualizar uma filial
+    Route::delete('{id}', [FilialController::class, 'destroy']); // Deletar uma filial
 });
