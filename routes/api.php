@@ -18,7 +18,7 @@ use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\GatepassController;
 use App\Http\Controllers\TaxaController;
 use App\Http\Controllers\PaymentMethodController;
-
+use App\Http\Controllers\RendaController;
 
 
 
@@ -231,3 +231,20 @@ Route::post('payment-methods', [PaymentMethodController::class, 'store']);      
 Route::put('payment-methods/{id}', [PaymentMethodController::class, 'update']);   // Atualizar
 Route::delete('payment-methods/{id}', [PaymentMethodController::class, 'destroy']); // Excluir
 
+//ROutes Renda
+
+
+// Rota para listar todas as rendas
+Route::get('rendas', [RendaController::class, 'index']);
+
+// Rota para criar uma nova renda
+Route::post('rendas', [RendaController::class, 'store']);
+
+// Rota para exibir uma renda específica
+Route::get('rendas/{id}', [RendaController::class, 'show']);
+
+// Rota para atualizar uma renda específica
+Route::put('rendas/{id}', [RendaController::class, 'update']);
+
+// Rota para deletar uma renda específica
+Route::delete('rendas/{id}', [RendaController::class, 'destroy']);
