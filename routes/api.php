@@ -19,6 +19,10 @@ use App\Http\Controllers\GatepassController;
 use App\Http\Controllers\TaxaController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\RendaController;
+use App\Http\Controllers\DespesaController;
+
+
+
 
 
 
@@ -248,3 +252,14 @@ Route::put('rendas/{id}', [RendaController::class, 'update']);
 
 // Rota para deletar uma renda específica
 Route::delete('rendas/{id}', [RendaController::class, 'destroy']);
+
+
+//Routes dispesas~
+
+Route::prefix('despesas')->group(function () {
+    Route::get('/', [DespesaController::class, 'index']);  // Listar todas as despesas
+    Route::post('/', [DespesaController::class, 'store']); // Criar uma nova despesa
+    Route::get('{id}', [DespesaController::class, 'show']);  // Exibir uma despesa específica
+    Route::put('{id}', [DespesaController::class, 'update']); // Atualizar uma despesa
+    Route::delete('{id}', [DespesaController::class, 'destroy']); // Deletar uma despesa
+});
