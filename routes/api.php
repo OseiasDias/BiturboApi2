@@ -15,6 +15,7 @@ use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\CorController;
 use App\Http\Controllers\OrdemDeServicoController;
 use App\Http\Controllers\FacturaController;
+use App\Http\Controllers\GatepassController;
 
 
 
@@ -176,19 +177,30 @@ Route::delete('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'destr
 
 //Faturas Routes
 
-Route::prefix('facturas')->group(function () {
-    // Lista todas as faturas
-    Route::get('/', [FacturaController::class, 'index']);
-    
-    // Exibe uma fatura específica
-    Route::get('{id}', [FacturaController::class, 'show']);
-    
-    // Cria uma nova fatura
-    Route::post('/', [FacturaController::class, 'store']);
-    
-    // Atualiza uma fatura existente
-    Route::put('{id}', [FacturaController::class, 'update']);
-    
-    // Deleta uma fatura
-    Route::delete('{id}', [FacturaController::class, 'destroy']);
+// Rota para listar todas as faturas
+Route::get('facturas', [FacturaController::class, 'index']);
+
+// Rota para exibir uma fatura específica
+Route::get('facturas/{id}', [FacturaController::class, 'show']);
+
+// Rota para criar uma nova fatura
+Route::post('facturas', [FacturaController::class, 'store']);
+
+// Rota para atualizar uma fatura
+Route::put('facturas/{id}', [FacturaController::class, 'update']);
+
+// Rota para deletar uma fatura
+Route::delete('facturas/{id}', [FacturaController::class, 'destroy']);
+
+
+
+//Routes Get Pass
+
+Route::prefix('gatepasses')->group(function() {
+    Route::get('/', [GatepassController::class, 'index']);
+    Route::get('{id}', [GatepassController::class, 'show']);
+    Route::post('/', [GatepassController::class, 'store']);
+    Route::put('{id}', [GatepassController::class, 'update']);
+    Route::delete('{id}', [GatepassController::class, 'destroy']);
 });
+
