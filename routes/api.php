@@ -25,6 +25,8 @@ use App\Http\Controllers\FilialController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\UnidadeMedidaController;
 use App\Http\Controllers\FabricanteController;
+use App\Http\Controllers\ModeloController;
+use App\Http\Controllers\TipoCombustivelController;
 
 
 
@@ -347,4 +349,27 @@ Route::prefix('fabricantes')->group(function () {
 
     // Deletar um fabricante específico
     Route::delete('{id}', [FabricanteController::class, 'destroy']);
+});
+
+
+//Routes modelos-veiculos
+
+
+Route::prefix('modelos-veiculos')->group(function () {
+    Route::get('/', [ModeloController::class, 'index']);  // Listar todos os modelos de veículos
+    Route::post('/', [ModeloController::class, 'store']); // Criar um novo modelo de veículo
+    Route::delete('{id}', [ModeloController::class, 'destroy']); // Deletar um modelo de veículo
+});
+
+
+//Routes tipo de combustivel
+
+// routes/api.php
+
+
+
+Route::prefix('tipos-combustiveis')->group(function () {
+    Route::get('/', [TipoCombustivelController::class, 'index']);  // Listar todos os tipos de combustíveis
+    Route::post('/', [TipoCombustivelController::class, 'store']); // Criar um novo tipo de combustível
+    Route::delete('{id}', [TipoCombustivelController::class, 'destroy']); // Deletar um tipo de combustível
 });
