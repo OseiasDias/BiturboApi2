@@ -24,7 +24,7 @@ use App\Http\Controllers\ServicoController;
 use App\Http\Controllers\FilialController;
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\UnidadeMedidaController;
-
+use App\Http\Controllers\FabricanteController;
 
 
 
@@ -323,4 +323,28 @@ Route::prefix('unidade-medidas')->group(function () {
     Route::get('{id}', [UnidadeMedidaController::class, 'show']); // Exibir uma unidade específica
     Route::put('{id}', [UnidadeMedidaController::class, 'update']); // Atualizar uma unidade
     Route::delete('{id}', [UnidadeMedidaController::class, 'destroy']); // Deletar uma unidade
+});
+
+
+//Route Nome do fabricante
+
+// routes/api.php
+
+
+// Agrupar rotas com o prefixo "fabricantes"
+Route::prefix('fabricantes')->group(function () {
+    // Listar todos os fabricantes
+    Route::get('/', [FabricanteController::class, 'index']);
+
+    // Criar um novo fabricante
+    Route::post('/', [FabricanteController::class, 'store']);
+
+    // Exibir um fabricante específico
+    Route::get('{id}', [FabricanteController::class, 'show']);
+
+    // Atualizar um fabricante específico
+    Route::put('{id}', [FabricanteController::class, 'update']);
+
+    // Deletar um fabricante específico
+    Route::delete('{id}', [FabricanteController::class, 'destroy']);
 });
