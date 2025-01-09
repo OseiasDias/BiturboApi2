@@ -27,6 +27,10 @@ use App\Http\Controllers\UnidadeMedidaController;
 use App\Http\Controllers\FabricanteController;
 use App\Http\Controllers\ModeloController;
 use App\Http\Controllers\TipoCombustivelController;
+use App\Http\Controllers\AdministradorController;
+use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\HorariosController;
+use App\Http\Controllers\FooterController;
 
 
 
@@ -39,7 +43,81 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });*/
 
 
+
+
+
+
+// routes/api.php
+// Routes Empresa
+
+// Routes Rodape
+
+
+
+
+
+// Prefixo para as rotas relacionadas ao Footer
+Route::prefix('footer')->group(function () {
+    // Criar um novo footer
+    Route::post('/', [FooterController::class, 'store']);
+
+    // Listar todos os footers
+    Route::get('/', [FooterController::class, 'index']);
+
+    // Visualizar um footer específico
+    Route::get('/{id}', [FooterController::class, 'show']);
+
+    // Atualizar um footer específico
+    Route::put('/{id}', [FooterController::class, 'update']);
+
+    // Deletar um footer específico
+    Route::delete('/{id}', [FooterController::class, 'destroy']);
+});
+
+
+// Rota para salvar os horários
+Route::post('/horarios', [HorariosController::class, 'store']);
+
+// Rota para exibir os horários
+Route::get('/horarios', [HorariosController::class, 'show']);
+
+// Rota para atualizar os horários de um dia específico
+Route::put('/horarios/{id}', [HorariosController::class, 'update']);
+
+
+//Routes Horarios
+
+// routes/api.php
+
+
+
+Route::prefix('empresa')->group(function () {
+    // Rota para criar os horários de uma empresa
+    Route::post('{empresaId}/horarios', [HorariosController::class, 'store']);
+
+    // Rota para visualizar os horários de uma empresa
+    Route::get('{empresaId}/horarios', [HorariosController::class, 'show']);
+
+    // Rota para atualizar os horários de uma empresa
+    Route::put('{empresaId}/horarios', [HorariosController::class, 'update']);
+});
+
+//Routes Administrador
+
+
+Route::prefix('administradores')->group(function () {
+    Route::get('/', [AdministradorController::class, 'index']);  // Listar todos os administradores
+    Route::get('{id}', [AdministradorController::class, 'show']);  // Exibir detalhes de um administrador
+    Route::post('/', [AdministradorController::class, 'store']); // Criar um novo administrador
+    Route::put('{id}', [AdministradorController::class, 'update']); // Atualizar um administrador
+    Route::delete('{id}', [AdministradorController::class, 'destroy']); // Deletar um administrador
+    Route::post('login', [AdministradorController::class, 'login']); // Login do administrador
+});
+
+
 //Routes Para equipe de suporte
+
+
 
 
 Route::get('equipe-suporte', [EquipeSuporteController::class, 'index']); // Para listar todos
