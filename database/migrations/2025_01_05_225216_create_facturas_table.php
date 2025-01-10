@@ -9,7 +9,7 @@ class CreateFacturasTable extends Migration
     public function up()
     {
         Schema::create('facturas', function (Blueprint $table) {
-            $table->id();
+            $table->id(); 
             $table->string('numero_fatura')->unique();
             $table->foreignId('cliente_id')->constrained('clientes');  // Referência à tabela de clientes
             $table->foreignId('ordem_servico_id')->constrained('ordens_de_servico');  // Alterado para ordem_servico_id, refere-se à tabela 'ordens_de_servico'

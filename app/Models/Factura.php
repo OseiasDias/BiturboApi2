@@ -12,12 +12,12 @@ class Factura extends Model
     protected $fillable = [
         'numero_fatura',
         'cliente_id',
-        'ordem_servico_id',  // Alterado para ordem_servico_id
+        'ordem_servico_id',
         'veiculo_id',
         'valor_pago',
         'desconto',
         'data',
-        'filial_id',
+        'filiais',
         'status',
         'tipo_pagamento',
         'valor_total',
@@ -31,21 +31,15 @@ class Factura extends Model
         return $this->belongsTo(Cliente::class);
     }
 
-    // Relacionamento com a tabela 'ordens_servico' (alterado de cartao_trabalho para ordem_servico)
+    // Relacionamento com a tabela 'ordens_de_servico'
     public function ordemServico()
     {
-        return $this->belongsTo(OrdemServico::class);  // Relacionamento com a tabela ordens_servico
+        return $this->belongsTo(OrdemServico::class);
     }
 
     // Relacionamento com a tabela 'veiculos'
     public function veiculo()
     {
         return $this->belongsTo(Veiculo::class);
-    }
-
-    // Relacionamento com a tabela 'filiais'
-    public function filial()
-    {
-        return $this->belongsTo(Filial::class);
     }
 }

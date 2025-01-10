@@ -265,6 +265,7 @@ Route::post('ordens-de-servico', [OrdemDeServicoController::class, 'store']);
 Route::put('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'update']);
 Route::delete('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'destroy']);
 
+
 //Faturas Routes
 
 // Rota para listar todas as faturas
