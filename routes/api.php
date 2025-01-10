@@ -31,7 +31,7 @@ use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\HorariosController;
 use App\Http\Controllers\FooterController;
-
+use App\Http\Controllers\SupplierController;
 
 
 
@@ -451,3 +451,18 @@ Route::prefix('tipos-combustiveis')->group(function () {
     Route::post('/', [TipoCombustivelController::class, 'store']); // Criar um novo tipo de combustível
     Route::delete('{id}', [TipoCombustivelController::class, 'destroy']); // Deletar um tipo de combustível
 });
+
+
+//ROutes fornecedor
+
+
+
+
+
+// Routes fornecedor
+Route::get('/suppliers', [SupplierController::class, 'index']);
+Route::get('/suppliers/{id}', [SupplierController::class, 'show']);
+Route::post('/suppliers', [SupplierController::class, 'store']);
+Route::put('/suppliers/{id}', [SupplierController::class, 'update']);
+Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy']);
+

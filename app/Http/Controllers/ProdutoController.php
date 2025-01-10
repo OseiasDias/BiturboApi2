@@ -2,85 +2,100 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Compra;
+use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
-class CompraController extends Controller
+class ProdutoController extends Controller
 {
-    // Exibir lista de compras
+    // Exibe todos os produtos
     public function index()
     {
-        $compras = Compra::all();
-        return response()->json($compras);
+        $produtos = Produto::all();
+        return response()->json($produtos);
     }
 
-    // Criar nova compra
+    // Exibe um produto específico
+    public function show($id)
+    {
+        $produto = Produto::find($id);
+
+        if (!$produto) {
+            return response()->json(['message' => 'Produto não encontrado'], 404);
+        }
+
+        return response()->json($produto);
+    }
+
+    // Cria um novo produto
     public function store(Request $request)
     {
         // Validação dos dados
-        $request->validate([
-            'numero_compra' => 'required|unique:compras',
+        $validator = Validator::make($request->all(), [
+            'numero_produto' => 'required|string|max:255|unique:produtos',
             'data_compra' => 'required|date',
-            'fornecedor' => 'required|exists:fornecedores,id',
-            'celular' => 'required|string',
-            'email' => 'required|email',
-            'endereco' => 'required|string',
-            'galho' => 'required|string'
+            'nome' => 'required|string|max:255',
+            'galho' => 'required|string|max:255',
+            'fabricante' => 'required|string|max:255',
+            'preco' => 'required|numeric',
+            'unidade_medida' => 'required|string|max:50',
+            'fornecedor' => 'required|string|max:255',
+            'cor' => 'nullable|string|max:50',
+            'garantia' => 'nullable|string|max:255',
+            'imagem' => 'nullable|string|max:255', // Se você deseja armazenar o nome do arquivo da imagem
         ]);
 
-        // Criação da nova compra
-        $compra = Compra::create([
-            'numero_compra' => $request->numero_compra,
-            'data_compra' => $request->data_compra,
-            'fornecedor_id' => $request->fornecedor,
-            'celular' => $request->celular,
-            'email' => $request->email,
-            'endereco' => $request->endereco,
-            'galho' => $request->galho,
-        ]);
-
-        // Retorna a compra criada com status 201 (criado)
-        return response()->json($compra, 201);
-    }
-
-    // Exibir compra específica
-    public function show($id)
-    {
-        $compra = Compra::find($id);
-
-        if (!$compra) {
-            return response()->json(['message' => 'Compra não encontrada'], 404);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
 
-        return response()->json($compra);
+        // Cria o produto
+        $produto = Produto::create($request->all());
+        return response()->json($produto, 201);
     }
 
-    // Atualizar dados da compra
+    // Atualiza as informações de um produto
     public function update(Request $request, $id)
     {
-        $compra = Compra::find($id);
+        $produto = Produto::find($id);
 
-        if (!$compra) {
-            return response()->json(['message' => 'Compra não encontrada'], 404);
+        if (!$produto) {
+            return response()->json(['message' => 'Produto não encontrado'], 404);
         }
 
-        // Atualiza os dados da compra
-        $compra->update($request->all());
+        // Validação dos dados
+        $validator = Validator::make($request->all(), [
+            'numero_produto' => 'required|string|max:255|unique:produtos,numero_produto,' . $id,
+            'data_compra' => 'required|date',
+            'nome' => 'required|string|max:255',
+            'galho' => 'required|string|max:255',
+            'fabricante' => 'required|string|max:255',
+            'preco' => 'required|numeric',
+            'unidade_medida' => 'required|string|max:50',
+            'fornecedor' => 'required|string|max:255',
+            'cor' => 'nullable|string|max:50',
+            'garantia' => 'nullable|string|max:255',
+            'imagem' => 'nullable|string|max:255', // Se você deseja armazenar o nome do arquivo da imagem
+        ]);
 
-        return response()->json($compra);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $produto->update($request->all());
+        return response()->json($produto);
     }
 
-    // Deletar compra
+    // Deleta um produto
     public function destroy($id)
     {
-        $compra = Compra::find($id);
+        $produto = Produto::find($id);
 
-        if (!$compra) {
-            return response()->json(['message' => 'Compra não encontrada'], 404);
+        if (!$produto) {
+            return response()->json(['message' => 'Produto não encontrado'], 404);
         }
 
-        $compra->delete();
-
-        return response()->json(['message' => 'Compra deletada com sucesso']);
+        $produto->delete();
+        return response()->json(['message' => 'Produto excluído com sucesso']);
     }
 }

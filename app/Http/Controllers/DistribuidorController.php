@@ -36,10 +36,10 @@ class DistribuidorController extends Controller
             'primeiro_nome' => 'required|string|max:50',
             'ultimo_nome' => 'required|string|max:50',
             'nome_empresa' => 'required|string|max:100',
-            'email' => 'required|email|max:50|unique:distribuidores,email',
-            'celular' => 'required|string|max:16|unique:distribuidores,celular',
+            'email' => 'required|email|max:50|unique:distribuidors,email',
+            'celular' => 'required|string|max:16|unique:distribuidors,celular',
             'telefone_fixo' => 'nullable|string|max:16',
-            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'imagem' => 'nullable|string|url',
             'genero' => 'nullable|string|in:Masculino,Feminino',
             'pais' => 'required|string|max:100',
             'estado' => 'nullable|string|max:100',
@@ -61,7 +61,7 @@ class DistribuidorController extends Controller
         // Se uma imagem for enviada
         if ($request->hasFile('imagem')) {
             // Armazenar a imagem e adicionar o caminho
-            $imagemPath = $request->file('imagem')->store('distribuidores', 'public');
+            $imagemPath = $request->file('imagem')->store('distribuidors', 'public');
             $distribuidorData['imagem'] = $imagemPath;
         }
     
@@ -87,10 +87,10 @@ class DistribuidorController extends Controller
             'primeiro_nome' => 'nullable|string|max:50',
             'ultimo_nome' => 'nullable|string|max:50',
             'nome_empresa' => 'nullable|string|max:100',
-            'email' => 'nullable|email|max:50|unique:distribuidores,email,' . $distribuidor->id,
-            'celular' => 'nullable|string|max:16|unique:distribuidores,celular,' . $distribuidor->id,
+            'email' => 'nullable|email|max:50|unique:distribuidors,email,' . $distribuidor->id,
+            'celular' => 'nullable|string|max:16|unique:distribuidors,celular,' . $distribuidor->id,
             'telefone_fixo' => 'nullable|string|max:16',
-            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'imagem' => 'nullable|string|url',
             'genero' => 'nullable|string|in:Masculino,Feminino',
             'pais' => 'nullable|string|max:100',
             'estado' => 'nullable|string|max:100',
