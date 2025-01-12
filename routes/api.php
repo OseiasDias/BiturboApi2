@@ -36,6 +36,7 @@ use App\Http\Controllers\SupplierController;
 
 
 
+
 /*
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
@@ -91,7 +92,23 @@ Route::put('/horarios/{id}', [HorariosController::class, 'update']);
 
 
 
-Route::prefix('empresa')->group(function () {
+// Rota para listar todas as empresas
+Route::get('empresas', [EmpresaController::class, 'index']);
+
+// Rota para exibir os detalhes de uma empresa específica
+Route::get('empresas/{id}', [EmpresaController::class, 'show']);
+
+// Rota para criar uma nova empresa
+Route::post('empresas', [EmpresaController::class, 'store']);
+
+// Rota para atualizar os dados de uma empresa específica
+Route::put('empresas/{id}', [EmpresaController::class, 'update']);
+
+// Rota para excluir uma empresa específica
+Route::delete('empresas/{id}', [EmpresaController::class, 'destroy']);
+
+
+/*Route::prefix('empresa')->group(function () {
     // Rota para criar os horários de uma empresa
     Route::post('{empresaId}/horarios', [HorariosController::class, 'store']);
 
@@ -100,7 +117,7 @@ Route::prefix('empresa')->group(function () {
 
     // Rota para atualizar os horários de uma empresa
     Route::put('{empresaId}/horarios', [HorariosController::class, 'update']);
-});
+});*/
 
 //Routes Administrador
 
