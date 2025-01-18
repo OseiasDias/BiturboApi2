@@ -221,7 +221,11 @@ Route::prefix('veiculos')->group(function () {
     Route::post('/', [VeiculoController::class, 'store']);
     Route::put('/{id}', [VeiculoController::class, 'update']);
     Route::delete('/{id}', [VeiculoController::class, 'destroy']);
+    
+    // Rota para obter todos os veículos de um cliente
+    Route::get('/cliente/{clienteId}', [VeiculoController::class, 'getVeiculosByCliente']);
 });
+
 
 
 //Routes tipo de veiculos

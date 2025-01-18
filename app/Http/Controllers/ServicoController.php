@@ -20,10 +20,15 @@ class ServicoController extends Controller
         $request->validate([
             'nome_servico' => 'required|string|max:255',
             'descricao' => 'required|string|max:1000',
+            'preco' => 'required|numeric|min:0', // Validação para o campo preco
         ]);
 
         // Cria o novo serviço
-        $servico = Servico::create($request->all());
+        $servico = Servico::create([
+            'nome_servico' => $request->nome_servico,
+            'descricao' => $request->descricao,
+            'preco' => $request->preco, // Inclui o preco na criação
+        ]);
 
         // Retorna o serviço criado com status 201
         return response()->json($servico, 201);
@@ -45,10 +50,15 @@ class ServicoController extends Controller
         $request->validate([
             'nome_servico' => 'required|string|max:255',
             'descricao' => 'required|string|max:1000',
+            'preco' => 'required|numeric|min:0', // Validação para o campo preco
         ]);
 
         // Atualiza os dados do serviço
-        $servico->update($request->all());
+        $servico->update([
+            'nome_servico' => $request->nome_servico,
+            'descricao' => $request->descricao,
+            'preco' => $request->preco, // Atualiza o preco
+        ]);
 
         // Retorna o serviço atualizado
         return response()->json($servico);
@@ -58,7 +68,7 @@ class ServicoController extends Controller
     {
         // Encontra o serviço com o id fornecido ou retorna erro 404
         Servico::destroy($id);
-        
+
         // Retorna um status de sucesso com código 204 (sem conteúdo)
         return response()->json(null, 204);
     }

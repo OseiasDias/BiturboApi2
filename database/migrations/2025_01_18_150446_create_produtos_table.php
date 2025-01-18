@@ -26,6 +26,12 @@ class CreateProdutosTable extends Migration
             $table->string('cor')->nullable(); // Cor do produto (opcional)
             $table->string('garantia')->nullable(); // Garantia do produto (opcional)
             $table->string('imagem')->nullable();  // Imagem do produto (opcional)
+            
+            // Alterando 'nota' para tipo 'text' em vez de 'string'
+            $table->text('nota')->default(''); // Nota como text, valor padrão ''
+            $table->boolean('interna')->default(false); // Valor para "Nota Interna"
+            $table->boolean('compartilhada')->default(false); // Valor para "Compartilhada"
+
             $table->timestamps(); // Timestamps de criação e atualização
         });
     }

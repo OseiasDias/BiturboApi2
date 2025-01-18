@@ -43,6 +43,9 @@ class ProdutoController extends Controller
             'cor' => 'nullable|string|max:50',
             'garantia' => 'nullable|string|max:255',
             'imagem' => 'nullable|string|max:255', // Se você deseja armazenar o nome do arquivo da imagem
+            'nota' => 'nullable|text',   // Validação para o campo nota
+            'interna' => 'nullable|boolean',       // Validação para o campo interna
+            'compartilhada' => 'nullable|boolean', // Validação para o campo compartilhada
         ]);
 
         if ($validator->fails()) {
@@ -76,6 +79,9 @@ class ProdutoController extends Controller
             'cor' => 'nullable|string|max:50',
             'garantia' => 'nullable|string|max:255',
             'imagem' => 'nullable|string|max:255', // Se você deseja armazenar o nome do arquivo da imagem
+            'nota' => 'nullable|text',   // Validação para o campo nota
+            'interna' => 'nullable|boolean',       // Validação para o campo interna
+            'compartilhada' => 'nullable|boolean', // Validação para o campo compartilhada
         ]);
 
         if ($validator->fails()) {

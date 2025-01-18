@@ -12,6 +12,7 @@ class Servico extends Model
     protected $fillable = [
         'nome_servico',
         'descricao',
+        'preco', // Adicionando o campo 'preco' à propriedade fillable
     ];
 
     // Se você precisar de timestamps automáticos:

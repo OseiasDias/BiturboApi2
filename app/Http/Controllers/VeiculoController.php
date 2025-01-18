@@ -115,6 +115,27 @@ class VeiculoController extends Controller
     }
     
 
+    // Exibe todos os veículos de um cliente específico
+public function getVeiculosByCliente($clienteId)
+{
+    // Verifica se o cliente existe
+    $cliente = Cliente::find($clienteId);
+
+    if (!$cliente) {
+        return response()->json(['message' => 'Cliente não encontrado'], 404);
+    }
+
+    // Busca todos os veículos associados ao cliente
+    $veiculos = Veiculo::where('cliente_id', $clienteId)->get();
+
+    if ($veiculos->isEmpty()) {
+        return response()->json(['message' => 'Nenhum veículo encontrado para este cliente'], 404);
+    }
+
+    return response()->json($veiculos);
+}
+
+
     // Deleta um veículo
     public function destroy($id)
     {

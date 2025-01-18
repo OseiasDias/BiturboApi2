@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -25,8 +23,17 @@ class Produto extends Model
         'cor',
         'garantia',
         'imagem',
+        'nota',          // Adicionando o campo nota
+        'interna',       // Adicionando o campo interna
+        'compartilhada', // Adicionando o campo compartilhada
     ];
 
     // Caso precise de um formato personalizado para o campo data_compra
     protected $dates = ['data_compra'];
+
+    // Para garantir que 'interna' e 'compartilhada' sejam interpretados como booleanos
+    protected $casts = [
+        'interna' => 'boolean',
+        'compartilhada' => 'boolean',
+    ];
 }

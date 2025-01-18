@@ -12,6 +12,7 @@ class CreateServicosTable extends Migration
             $table->id();
             $table->string('nome_servico');
             $table->text('descricao');
+            $table->decimal('preco', 10, 2); // Adicionando o campo preco (10 dígitos no total, 2 após o ponto decimal)
             $table->timestamps();
         });
     }
