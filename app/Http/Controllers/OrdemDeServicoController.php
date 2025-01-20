@@ -1,55 +1,56 @@
 <?php
 
-// app/Http/Controllers/OrdemDeServicoController.php
-
 namespace App\Http\Controllers;
 
-use App\Models\OrdemDeServico;
+use App\Models\Produto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class OrdemDeServicoController extends Controller
+class ProdutoController extends Controller
 {
-    // Exibe todas as ordens de serviço
+    /**
+     * Exibe uma lista de todos os produtos.
+     */
     public function index()
     {
-        $ordens = OrdemDeServico::all();
-        return response()->json($ordens);
+        $produtos = Produto::all(); // Recupera todos os produtos
+        return response()->json($produtos); // Retorna a lista de produtos em formato JSON
     }
 
-    // Exibe uma ordem de serviço específica
+    /**
+     * Exibe os detalhes de um produto específico.
+     */
     public function show($id)
     {
-        $ordem = OrdemDeServico::find($id);
+        $produto = Produto::find($id);
 
-        if (!$ordem) {
-            return response()->json(['message' => 'Ordem de serviço não encontrada'], 404);
+        if (!$produto) {
+            return response()->json(['message' => 'Produto não encontrado'], 404);
         }
 
-        return response()->json($ordem);
+        return response()->json($produto); // Retorna os detalhes do produto
     }
 
-    // Cria uma nova ordem de serviço
+    /**
+     * Cria um novo produto.
+     */
     public function store(Request $request)
     {
-        // Validação dos dados da ordem de serviço
+        // Validação dos dados do produto
         $validator = Validator::make($request->all(), [
-            'jobno' => 'required|string|max:255',
-            'cust_id' => 'required|exists:clientes,id',
-            'vhi_id' => 'required|exists:veiculos,id',
-            'data_inicial_entrada' => 'required|date',
-            'repair_cat' => 'required|in:breakdown,booked vehicle,repeat job,customer waiting',
-            'km_entrada' => 'required|integer',
-            'charge_required' => 'required|numeric',
-            'branch' => 'required|string|max:255',
-            'status' => 'required|in:pendente,em andamento,concluido',
-            'garantia_dias' => 'required|integer',
-            'data_final_saida' => 'required|date',
-            'defeito_ou_servico' => 'required|string',
-            'images' => 'nullable|array', // Imagens são opcionais, mas se fornecidas, precisam ser um array
-            'washbay' => 'nullable|boolean',
-            'motTestStatusCheckbox' => 'nullable|boolean',
-            'motTestCharge' => 'nullable|numeric',
+            'data_compra' => 'required|date',
+            'nome' => 'required|max:100',
+            'galho' => 'required|string|max:255',
+            'fabricante' => 'required|string|max:255',
+            'preco' => 'required|numeric',
+            'unidade_medida' => 'required|string|max:255',
+            'fornecedor' => 'required|string|max:255',
+            'garantia' => 'nullable|max:100',
+            'imagem' => 'nullable|string|max:255',
+            'nota' => 'nullable|max:100',
+            'nota_arquivos' => 'nullable|string',
+            'interna' => 'nullable|boolean',
+            'compartilhada' => 'nullable|boolean',
         ]);
 
         // Se a validação falhar, retorna os erros
@@ -57,64 +58,93 @@ class OrdemDeServicoController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        // Processamento das imagens se elas existirem
-        $imagensJson = null;
-        if ($request->has('images')) {
-            // Aqui o campo 'images' deve ser um array de URLs das imagens
-            $imagens = [];
-            foreach ($request->images as $imagem) {
-                // Aqui, você pode adicionar qualquer lógica para processar o arquivo de imagem
-                // Se forem URLs, simplesmente adiciona ao array
-                $imagens[] = $imagem; 
-            }
-            // Converte o array de imagens para JSON
-            $imagensJson = json_encode($imagens);
-        }
+        // Criação do produto
+        $produto = Produto::create([
+            'data_compra' => $request->data_compra,
+            'nome' => $request->nome,
+            'galho' => $request->galho,
+            'fabricante' => $request->fabricante,
+            'preco' => $request->preco,
+            'unidade_medida' => $request->unidade_medida,
+            'fornecedor' => $request->fornecedor,
+            'garantia' => $request->garantia ?? null,
+            'imagem' => $request->imagem ?? null,
+            'nota' => $request->nota ?? null,
+            'nota_arquivos' => $request->nota_arquivos ?? null,
+            'interna' => $request->interna ?? false,
+            'compartilhada' => $request->compartilhada ?? false,
+        ]);
 
-        // Criação da ordem de serviço, incluindo as imagens convertidas (se houver)
-        $ordem = OrdemDeServico::create(array_merge($request->all(), ['images' => $imagensJson]));
-
-        return response()->json($ordem, 201);
+        return response()->json($produto, 201); // Retorna o produto criado
     }
 
-    // Atualiza uma ordem de serviço
+    /**
+     * Atualiza um produto existente.
+     */
     public function update(Request $request, $id)
     {
-        $ordem = OrdemDeServico::find($id);
+        $produto = Produto::find($id);
 
-        if (!$ordem) {
-            return response()->json(['message' => 'Ordem de serviço não encontrada'], 404);
+        if (!$produto) {
+            return response()->json(['message' => 'Produto não encontrado'], 404);
         }
 
-        // Processamento das imagens (se enviadas) durante a atualização
-        $imagensJson = null;
-        if ($request->has('images')) {
-            // Se as imagens forem fornecidas, processamos da mesma maneira
-            $imagens = [];
-            foreach ($request->images as $imagem) {
-                $imagens[] = $imagem;
-            }
-            // Converte o array de imagens para JSON
-            $imagensJson = json_encode($imagens);
+        // Validação dos dados do produto
+        $validator = Validator::make($request->all(), [
+            'data_compra' => 'required|date',
+            'nome' => 'required|max:100',
+            'galho' => 'required|string|max:255',
+            'fabricante' => 'required|string|max:255',
+            'preco' => 'required|numeric',
+            'unidade_medida' => 'required|string|max:255',
+            'fornecedor' => 'required|string|max:255',
+            'garantia' => 'nullable|max:100',
+            'imagem' => 'nullable|string|max:255',
+            'nota' => 'nullable|max:100',
+            'nota_arquivos' => 'nullable|string',
+            'interna' => 'nullable|boolean',
+            'compartilhada' => 'nullable|boolean',
+        ]);
+
+        // Se a validação falhar, retorna os erros
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
         }
 
-        // Atualiza a ordem de serviço com as imagens processadas (se houver)
-        $ordem->update(array_merge($request->all(), ['images' => $imagensJson]));
+        // Atualiza o produto
+        $produto->update([
+            'data_compra' => $request->data_compra,
+            'nome' => $request->nome,
+            'galho' => $request->galho,
+            'fabricante' => $request->fabricante,
+            'preco' => $request->preco,
+            'unidade_medida' => $request->unidade_medida,
+            'fornecedor' => $request->fornecedor,
+            'garantia' => $request->garantia ?? null,
+            'imagem' => $request->imagem ?? null,
+            'nota' => $request->nota ?? null,
+            'nota_arquivos' => $request->nota_arquivos ?? null,
+            'interna' => $request->interna ?? false,
+            'compartilhada' => $request->compartilhada ?? false,
+        ]);
 
-        return response()->json($ordem);
+        return response()->json($produto); // Retorna o produto atualizado
     }
 
-    // Deleta uma ordem de serviço
+    /**
+     * Remove um produto.
+     */
     public function destroy($id)
     {
-        $ordem = OrdemDeServico::find($id);
+        $produto = Produto::find($id);
 
-        if (!$ordem) {
-            return response()->json(['message' => 'Ordem de serviço não encontrada'], 404);
+        if (!$produto) {
+            return response()->json(['message' => 'Produto não encontrado'], 404);
         }
 
-        $ordem->delete();
+        // Deleta o produto
+        $produto->delete();
 
-        return response()->json(['message' => 'Ordem de serviço excluída com sucesso']);
+        return response()->json(['message' => 'Produto excluído com sucesso']); // Retorna mensagem de sucesso
     }
 }

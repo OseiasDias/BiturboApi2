@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ProdutoController extends Controller
@@ -32,28 +33,38 @@ class ProdutoController extends Controller
     {
         // Validação dos dados
         $validator = Validator::make($request->all(), [
-            'numero_produto' => 'required|string|max:255|unique:produtos',
             'data_compra' => 'required|date',
-            'nome' => 'required|string|max:255',
-            'galho' => 'required|string|max:255',
+            'nome' => 'required|string|max:100',
+            'galho' => 'required|string',
             'fabricante' => 'required|string|max:255',
             'preco' => 'required|numeric',
-            'unidade_medida' => 'required|string|max:50',
+            'unidade_medida' => 'required|string|max:255',
             'fornecedor' => 'required|string|max:255',
-            'cor' => 'nullable|string|max:50',
-            'garantia' => 'nullable|string|max:255',
-            'imagem' => 'nullable|string|max:255', // Se você deseja armazenar o nome do arquivo da imagem
-            'nota' => 'nullable|text',   // Validação para o campo nota
-            'interna' => 'nullable|boolean',       // Validação para o campo interna
-            'compartilhada' => 'nullable|boolean', // Validação para o campo compartilhada
+            'garantia' => 'nullable|string|max:100',
+            'imagem' => 'nullable|string|max:255', // Validando o campo imagem como uma URL
+            'nota' => 'nullable|string',
+            'nota_arquivos' => 'nullable|string',
+            'interna' => 'boolean',
+            'compartilhada' => 'boolean',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // Cria o produto
+        // Verifica se o campo imagem foi enviado e faz o upload
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $path = $imagem->store('produtos', 's3'); // O segundo parâmetro é o disco configurado no S3
+            $imagemUrl = Storage::disk('s3')->url($path); // Gera a URL pública do arquivo
+
+            // Agora podemos armazenar a URL da imagem no banco de dados
+            $request->merge(['imagem' => $imagemUrl]);
+        }
+
+        // Cria o novo produto
         $produto = Produto::create($request->all());
+        
         return response()->json($produto, 201);
     }
 
@@ -68,27 +79,38 @@ class ProdutoController extends Controller
 
         // Validação dos dados
         $validator = Validator::make($request->all(), [
-            'numero_produto' => 'required|string|max:255|unique:produtos,numero_produto,' . $id,
-            'data_compra' => 'required|date',
-            'nome' => 'required|string|max:255',
-            'galho' => 'required|string|max:255',
-            'fabricante' => 'required|string|max:255',
-            'preco' => 'required|numeric',
-            'unidade_medida' => 'required|string|max:50',
-            'fornecedor' => 'required|string|max:255',
-            'cor' => 'nullable|string|max:50',
-            'garantia' => 'nullable|string|max:255',
-            'imagem' => 'nullable|string|max:255', // Se você deseja armazenar o nome do arquivo da imagem
-            'nota' => 'nullable|text',   // Validação para o campo nota
-            'interna' => 'nullable|boolean',       // Validação para o campo interna
-            'compartilhada' => 'nullable|boolean', // Validação para o campo compartilhada
+            'data_compra' => 'sometimes|required|date',
+            'nome' => 'sometimes|required|string|max:100',
+            'galho' => 'sometimes|required|string',
+            'fabricante' => 'sometimes|required|string|max:255',
+            'preco' => 'sometimes|required|numeric',
+            'unidade_medida' => 'sometimes|required|string|max:255',
+            'fornecedor' => 'sometimes|required|string|max:255',
+            'garantia' => 'nullable|string|max:100',
+            'imagem' => 'nullable|string|max:255', // Validando o campo imagem como uma URL
+            'nota' => 'nullable|string',
+            'nota_arquivos' => 'nullable|string',
+            'interna' => 'boolean',
+            'compartilhada' => 'boolean',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
+        // Verifica se o campo imagem foi enviado e faz o upload
+        if ($request->hasFile('imagem')) {
+            $imagem = $request->file('imagem');
+            $path = $imagem->store('produtos', 's3');
+            $imagemUrl = Storage::disk('s3')->url($path);
+            
+            // Atualiza a URL da imagem
+            $produto->imagem = $imagemUrl;
+        }
+
+        // Atualiza os dados do produto
         $produto->update($request->all());
+        
         return response()->json($produto);
     }
 
@@ -102,6 +124,7 @@ class ProdutoController extends Controller
         }
 
         $produto->delete();
+        
         return response()->json(['message' => 'Produto excluído com sucesso']);
     }
 }

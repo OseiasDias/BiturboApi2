@@ -108,16 +108,6 @@ Route::put('empresas/{id}', [EmpresaController::class, 'update']);
 Route::delete('empresas/{id}', [EmpresaController::class, 'destroy']);
 
 
-/*Route::prefix('empresa')->group(function () {
-    // Rota para criar os horários de uma empresa
-    Route::post('{empresaId}/horarios', [HorariosController::class, 'store']);
-
-    // Rota para visualizar os horários de uma empresa
-    Route::get('{empresaId}/horarios', [HorariosController::class, 'show']);
-
-    // Rota para atualizar os horários de uma empresa
-    Route::put('{empresaId}/horarios', [HorariosController::class, 'update']);
-});*/
 
 //Routes Administrador
 
