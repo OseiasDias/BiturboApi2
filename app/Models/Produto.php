@@ -1,7 +1,5 @@
 <?php
 
-
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,21 +9,30 @@ class Produto extends Model
 {
     use HasFactory;
 
-    protected $table = 'produtos';
-
     protected $fillable = [
-        'data_compra',
         'nome',
         'galho',
-        'fabricante',
+        'fabricante_id',
         'preco',
         'unidade_medida',
-        'fornecedor',
+        'distribuidor_id',
+        'data_compra',
         'garantia',
-        'imagem',
+        'imagem',  // Agora é uma string
         'nota',
-        'nota_arquivos',
         'interna',
-        'compartilhada'
+        'compartilhada',
     ];
+
+    // Relacionamento com Fabricante
+    public function fabricante()
+    {
+        return $this->belongsTo(Fabricante::class);
+    }
+
+    // Relacionamento com Distribuidor
+    public function distribuidor()
+    {
+        return $this->belongsTo(Distribuidor::class);
+    }
 }

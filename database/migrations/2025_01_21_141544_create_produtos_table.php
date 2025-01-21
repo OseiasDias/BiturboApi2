@@ -10,17 +10,16 @@ class CreateProdutosTable extends Migration
     {
         Schema::create('produtos', function (Blueprint $table) {
             $table->id();
-            $table->date('data_compra');
-            $table->string('nome', 100); // Agora é 100 caracteres
-            $table->string('galho'); // String simples
-            $table->string('fabricante', 255);
+            $table->string('nome');
+            $table->string('galho');
+            $table->foreignId('fabricante_id')->constrained('fabricantes')->onDelete('cascade');
             $table->decimal('preco', 10, 2);
-            $table->string('unidade_medida', 255);
-            $table->string('fornecedor', 255);
-            $table->string('garantia', 100)->nullable(); // Máximo de 100 caracteres
-            $table->string('imagem')->nullable(); // String para armazenar URL ou caminho da imagem
+            $table->string('unidade_medida');
+            $table->foreignId('distribuidor_id')->constrained('distribuidors')->onDelete('cascade');
+            $table->date('data_compra');
+            $table->string('garantia')->nullable();
+            $table->string('imagem')->nullable();  // Agora é uma string normal
             $table->text('nota')->nullable();
-            $table->text('nota_arquivos')->nullable(); // String simples para armazenar caminho/URL
             $table->boolean('interna')->default(false);
             $table->boolean('compartilhada')->default(false);
             $table->timestamps();
