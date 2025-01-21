@@ -19,7 +19,7 @@ class UnidadeMedidaController extends Controller
     {
         // Validação
         $request->validate([
-            'unidade' => 'required|string|max:50',
+            'unidade' => 'required|string|max:100|unique:unidade_medidas', // Tamanho máximo de 100 e campo único
         ]);
 
         // Criação da unidade de medida
@@ -43,7 +43,7 @@ class UnidadeMedidaController extends Controller
 
         // Validação
         $request->validate([
-            'unidade' => 'required|string|max:50',
+            'unidade' => 'required|string|max:100|unique:unidade_medidas,unidade,' . $unidade->id, // Atualiza com exceção para o registro atual
         ]);
 
         // Atualização da unidade de medida

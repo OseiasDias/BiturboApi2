@@ -21,7 +21,7 @@ class FabricanteController extends Controller
     {
         // Validação dos dados recebidos
         $request->validate([
-            'nome' => 'required|string|max:100', // Valida que o nome é obrigatório e não ultrapassa 30 caracteres
+            'nome' => 'required|string|max:100|unique:fabricantes', // Valida que o nome é único na tabela 'fabricantes'
         ]);
 
         // Criação do novo fabricante
@@ -45,7 +45,7 @@ class FabricanteController extends Controller
     {
         // Validação dos dados recebidos
         $request->validate([
-            'nome' => 'required|string|max:100', // Valida que o nome é obrigatório e não ultrapassa 30 caracteres
+            'nome' => 'required|string|max:100|unique:fabricantes,nome,' . $id, // Valida que o nome é único, mas permite atualizar o mesmo nome
         ]);
 
         // Encontrar o fabricante pelo ID
