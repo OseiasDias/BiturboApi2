@@ -1,6 +1,7 @@
 <?php
 
 
+// app/Models/Cliente.php
 
 namespace App\Models;
 
@@ -13,31 +14,29 @@ class Cliente extends Model
 {
     use HasFactory, Notifiable;
 
-    // Nome da tabela no banco de dados
-    protected $table = 'clientes';
+  protected $fillable = [
+    'primeiro_nome',
+    'sobrenome',
+    'celular',
+    'email',
+    'senha',
+    'bilhete_identidade',
+    'foto',
+    'genero',
+    'nome_empresa',
+    'nif',
+    'telefone_fixo',
+    'pais',
+    'provincia',
+    'municipio',
+    'endereco',
+    'nota',
+    'bloqueado',
+    'arquivo_nota', // Novo campo
+    'interna', // Novo campo
+    'compartilhado', // Novo campo
+];
 
-    // Campos que podem ser preenchidos massivamente
-    protected $fillable = [
-        'primeiro_nome',
-        'sobrenome',
-        'data_nascimento',
-        'email',
-        'senha',
-        'celular',
-        'foto',
-        'genero',
-        'nome_exibicao',
-        'nome_empresa',
-        'telefone_fixo',
-        'nif',
-        'id_pais',
-        'id_provincia',
-        'municipio',
-        'endereco',
-        'estado',
-    ];
-
-    // Criptografar a senha antes de salvar
     protected static function boot()
     {
         parent::boot();
@@ -48,4 +47,8 @@ class Cliente extends Model
             }
         });
     }
+
+    protected $hidden = [
+        'senha',
+    ];
 }

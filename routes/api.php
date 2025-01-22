@@ -174,12 +174,18 @@ Route::delete('funcionarios/{id}', [FuncionarioController::class, 'destroy']);
 
 
 
+
+// routes/api.php
+
+
+
 Route::get('clientes', [ClienteController::class, 'index']);
 Route::get('clientes/{id}', [ClienteController::class, 'show']);
 Route::post('clientes', [ClienteController::class, 'store']);
 Route::put('clientes/{id}', [ClienteController::class, 'update']);
 Route::delete('clientes/{id}', [ClienteController::class, 'destroy']);
-
+Route::post('clientes/login', [ClienteController::class, 'login']);
+Route::post('clientes/{id}/bloqueio', [ClienteController::class, 'toggleBloqueio']);
 
 //Routes Produtos
 
