@@ -1,42 +1,21 @@
 <?php
-// app/Models/Funcionario.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
 class Funcionario extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
-    // Defina o nome da tabela se ela não seguir a convenção (plurais, etc.)
-    protected $table = 'funcionarios';
-
-    // Atributos que podem ser preenchidos (protegendo contra mass assignment)
     protected $fillable = [
-        'nome',
-        'sobrenome',
-        'data_nascimento',
-        'email',
-        'foto',
-        'genero',
-        'senha',
-        'celular',
-        'telefone_fixo',
-        'filial',
-        'cargo',
-        'nome_exibicao',
-        'data_admissao',
-        'pais',
-        'estado',
-        'cidade',
-        'endereco',
+        'nome', 'sobrenome', 'dataNascimento', 'email', 'bilheteIdentidade', 'nomeBanco',
+        'iban', 'senha', 'foto', 'genero', 'celular', 'telefoneFixo', 'filial', 'cargo',
+        'nomeExibicao', 'dataAdmissao', 'pais', 'estado', 'cidade', 'endereco', 'bloqueado'
     ];
 
-    // Ações adicionais, como criptografar senha antes de salvar no banco
     protected static function boot()
     {
         parent::boot();
@@ -47,4 +26,8 @@ class Funcionario extends Model
             }
         });
     }
+
+    protected $hidden = [
+        'senha',
+    ];
 }

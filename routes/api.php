@@ -167,7 +167,11 @@ Route::get('funcionarios/{id}', [FuncionarioController::class, 'show']);
 Route::post('funcionarios', [FuncionarioController::class, 'store']);
 Route::put('funcionarios/{id}', [FuncionarioController::class, 'update']);
 Route::delete('funcionarios/{id}', [FuncionarioController::class, 'destroy']);
+// Rota para login de um funcionário
+Route::post('funcionarios/login', [FuncionarioController::class, 'login']);
 
+// Rota para alternar o bloqueio de um funcionário específico
+Route::post('funcionarios/{id}/bloqueio', [FuncionarioController::class, 'toggleBloqueio']);
 
 //ROutes para Clientes
 

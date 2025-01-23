@@ -1,5 +1,4 @@
 <?php
-// database/migrations/xxxx_xx_xx_xxxxxx_create_funcionarios_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -10,24 +9,28 @@ class CreateFuncionariosTable extends Migration
     public function up()
     {
         Schema::create('funcionarios', function (Blueprint $table) {
-            $table->id(); // Chave primária
+            $table->id();
             $table->string('nome');
             $table->string('sobrenome');
-            $table->date('data_nascimento')->nullable();
+            $table->date('dataNascimento');
             $table->string('email')->unique();
+            $table->string('bilheteIdentidade');
+            $table->string('nomeBanco')->nullable();
+            $table->string('iban')->nullable();
+            $table->string('senha');
             $table->string('foto')->nullable();
             $table->enum('genero', ['masculino', 'feminino']);
-            $table->string('senha');
-            $table->string('celular')->unique();
-            $table->string('telefone_fixo')->nullable();
+            $table->string('celular');
+            $table->string('telefoneFixo')->nullable();
             $table->string('filial');
             $table->string('cargo');
-            $table->string('nome_exibicao')->nullable();
-            $table->date('data_admissao');
+            $table->string('nomeExibicao')->nullable();
+            $table->date('dataAdmissao');
             $table->string('pais');
-            $table->string('estado');
-            $table->string('cidade');
+            $table->string('estado')->nullable();
+            $table->string('cidade')->nullable();
             $table->text('endereco');
+            $table->boolean('bloqueado')->default(false); // Adicionado o campo bloqueado
             $table->timestamps();
         });
     }
