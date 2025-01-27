@@ -17,14 +17,12 @@ class CreateFuncionariosTable extends Migration
             $table->string('bilheteIdentidade');
             $table->string('nomeBanco')->nullable();
             $table->string('iban')->nullable();
-            $table->string('senha');
             $table->string('foto')->nullable();
             $table->enum('genero', ['masculino', 'feminino']);
             $table->string('celular');
             $table->string('telefoneFixo')->nullable();
             $table->string('filial');
             $table->string('cargo');
-            $table->string('nomeExibicao')->nullable();
             $table->date('dataAdmissao');
             $table->string('pais');
             $table->string('estado')->nullable();

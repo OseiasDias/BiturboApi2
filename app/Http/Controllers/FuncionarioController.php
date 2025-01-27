@@ -4,78 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Funcionario;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Storage;
 
 class FuncionarioController extends Controller
 {
+    // Método para listar todos os funcionários
     public function index()
     {
         $funcionarios = Funcionario::all();
         return response()->json($funcionarios);
     }
 
-     /**
-     * Método para login do funcionário
-     */
-    public function login(Request $request)
-    {
-        // Validação dos dados de entrada
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'senha' => 'required|string|min:8',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        // Verificando as credenciais
-        $funcionario = Funcionario::where('email', $request->email)->first();
-        
-        if (!$funcionario || !Hash::check($request->senha, $funcionario->senha)) {
-            return response()->json(['message' => 'Credenciais inválidas'], 401);
-        }
-
-        // Gerar o token de autenticação (usando Laravel Passport ou outra implementação)
-        $token = $funcionario->createToken('FuncionarioApp')->accessToken;
-
-        // Retornar os dados do funcionário e o token
-        return response()->json([
-            'funcionario' => $funcionario,
-            'token' => $token,
-        ]);
-    }
-
-
+    // Método para mostrar um único funcionário
     public function show($id)
     {
         $funcionario = Funcionario::find($id);
         if (!$funcionario) {
-            return response()->json(['message' => 'Funcionário não encontrado'], 404);
+            return response()->json(['message' => 'Funcionario não encontrado'], 404);
         }
         return response()->json($funcionario);
     }
 
+    // Método para criar um novo funcionário
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        // Validação com campos adicionais
+        $validatedData = $request->validate([
             'nome' => 'required|string|max:255',
             'sobrenome' => 'required|string|max:255',
             'dataNascimento' => 'required|date',
             'email' => 'required|email|unique:funcionarios,email',
-            'bilheteIdentidade' => 'required|string|max:255',
-            'senha' => 'required|string|min:8',
+            'bilheteIdentidade' => 'required|string',
             'nomeBanco' => 'nullable|string|max:255',
             'iban' => 'nullable|string|max:255',
             'foto' => 'nullable|string|max:255',
             'genero' => 'required|in:masculino,feminino',
-            'celular' => 'required|string|max:20',
-            'telefoneFixo' => 'nullable|string|max:20',
+            'celular' => 'required|string',
+            'telefoneFixo' => 'nullable|string|max:255',
             'filial' => 'required|string|max:255',
             'cargo' => 'required|string|max:255',
-            'nomeExibicao' => 'nullable|string|max:255',
             'dataAdmissao' => 'required|date',
             'pais' => 'required|string|max:255',
             'estado' => 'nullable|string|max:255',
@@ -84,57 +50,61 @@ class FuncionarioController extends Controller
             'bloqueado' => 'nullable|boolean',
         ]);
 
-        $funcionario = Funcionario::create($validated);
+        // Criação do novo funcionário
+        $funcionario = Funcionario::create($validatedData);
 
         return response()->json($funcionario, 201);
     }
 
+    // Método para atualizar um funcionário existente
     public function update(Request $request, $id)
     {
+        // Encontrar o funcionário
         $funcionario = Funcionario::find($id);
         if (!$funcionario) {
-            return response()->json(['message' => 'Funcionário não encontrado'], 404);
+            return response()->json(['message' => 'Funcionario não encontrado'], 404);
         }
 
-        $validator = Validator::make($request->all(), [
-            'celular' => 'nullable|string|unique:funcionarios,celular,' . $funcionario->id,
-            'email' => 'nullable|email|unique:funcionarios,email,' . $funcionario->id,
-            'senha' => 'nullable|string|min:8',
+        // Validação com campos adicionais
+        $validatedData = $request->validate([
+            'nome' => 'string|max:255',
+            'sobrenome' => 'string|max:255',
+            'dataNascimento' => 'date',
+            'email' => 'email|unique:funcionarios,email,' . $id,
+            'bilheteIdentidade' => 'string',
+            'nomeBanco' => 'nullable|string|max:255',
+            'iban' => 'nullable|string|max:255',
+            'foto' => 'nullable|string|max:255',
+            'genero' => 'in:masculino,feminino',
+            'celular' => 'string',
+            'telefoneFixo' => 'nullable|string|max:255',
+            'filial' => 'string|max:255',
+            'cargo' => 'string|max:255',
+            'dataAdmissao' => 'date',
+            'pais' => 'string|max:255',
+            'estado' => 'nullable|string|max:255',
+            'cidade' => 'nullable|string|max:255',
+            'endereco' => 'string',
+            'bloqueado' => 'nullable|boolean',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+        // Atualizando os dados do funcionário
+        $funcionario->update($validatedData);
 
-        if ($request->has('senha')) {
-            $request->merge(['senha' => Hash::make($request->senha)]);
-        }
-
-        $funcionario->update($request->all());
         return response()->json($funcionario);
     }
 
+    // Método para deletar um funcionário
     public function destroy($id)
     {
+        // Encontrar o funcionário
         $funcionario = Funcionario::find($id);
         if (!$funcionario) {
-            return response()->json(['message' => 'Funcionário não encontrado'], 404);
+            return response()->json(['message' => 'Funcionario não encontrado'], 404);
         }
 
+        // Deletar o funcionário
         $funcionario->delete();
-        return response()->json(['message' => 'Funcionário excluído com sucesso']);
-    }
-
-    public function toggleBloqueio($id)
-    {
-        $funcionario = Funcionario::find($id);
-        if (!$funcionario) {
-            return response()->json(['message' => 'Funcionário não encontrado'], 404);
-        }
-
-        $funcionario->bloqueado = !$funcionario->bloqueado;
-        $funcionario->save();
-
-        return response()->json($funcionario);
+        return response()->json(['message' => 'Funcionario deletado com sucesso']);
     }
 }
