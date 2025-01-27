@@ -14,6 +14,8 @@ use App\Http\Controllers\TipoVeiculoController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\CorController;
 use App\Http\Controllers\OrdemDeServicoController;
+use App\Http\Controllers\OrdemDeReparacaoController;
+
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\GatepassController;
 use App\Http\Controllers\TaxaController;
@@ -304,6 +306,23 @@ Route::put('facturas/{id}', [FacturaController::class, 'update']);
 // Rota para deletar uma fatura
 Route::delete('facturas/{id}', [FacturaController::class, 'destroy']);
 
+
+//ORDEM DE REPARACAO
+
+// Rota para listar todas as ordens de reparo
+Route::get('ordens-de-reparo', [OrdemDeReparacaoController::class, 'index']);
+
+// Rota para exibir uma ordem de reparo específica
+Route::get('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'show']);
+
+// Rota para criar uma nova ordem de reparo
+Route::post('ordens-de-reparo', [OrdemDeReparacaoController::class, 'store']);
+
+// Rota para atualizar uma ordem de reparo existente
+Route::put('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'update']);
+
+// Rota para deletar uma ordem de reparo
+Route::delete('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'destroy']);
 
 
 //Routes Get Pass

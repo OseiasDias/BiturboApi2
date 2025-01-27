@@ -6,7 +6,7 @@ use App\Models\Produto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ProdutoController extends Controller
+class OrdemDeServicoController extends Controller
 {
     /**
      * Exibe uma lista de todos os produtos.
