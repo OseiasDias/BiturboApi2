@@ -39,6 +39,7 @@ class OrdemDeReparacaoController extends Controller
             'garantia_dias' => 'required|integer',
             'data_final_saida' => 'required|date',
             'defeito_ou_servico' => 'required|string',
+            'horas_reparacao' => 'nullable|integer'
         ]);
 
         $ordem = OrdemDeReparacao::create($request->all());

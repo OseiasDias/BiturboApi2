@@ -32,6 +32,7 @@ class OrdemDeReparacao extends Model
         'cobrar_lavagem', // washBayCharge
         'status_test_mot', // motTestStatusCheckbox
         'cobrar_test_mot', // motTestCharge
+        'horas_reparacao',
     ];
 
     protected $casts = [
@@ -42,5 +43,6 @@ class OrdemDeReparacao extends Model
         'status_test_mot' => 'boolean',
         'cobrar_test_mot' => 'decimal:2',
         'cobrar_lavagem' => 'decimal:2',
+        'horas_reparacao' => 'integer'
     ];
 }

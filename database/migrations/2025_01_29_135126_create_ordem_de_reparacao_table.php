@@ -18,7 +18,7 @@ class CreateOrdemDeReparacaoTable extends Migration
             $table->integer('km_entrada'); // KM de entrada
             $table->decimal('cobrar_reparo', 10, 2); // Valor a ser cobrado pelo reparo
             $table->string('filial'); // Filial onde o serviço será prestado
-            $table->enum('status', ['pendente', 'em andamento', 'concluido']); // Status da ordem
+            $table->string('status', 100); // Status da ordem (transformado em string simples)
             $table->integer('garantia_dias'); // Garantia em dias
             $table->dateTime('data_final_saida'); // Data de saída final
             $table->text('detalhes')->nullable(); // Detalhes do reparo
@@ -30,6 +30,7 @@ class CreateOrdemDeReparacaoTable extends Migration
             $table->decimal('cobrar_lavagem', 10, 2)->nullable(); // Valor a ser cobrado pela lavagem
             $table->boolean('status_test_mot')->default(0); // Indica se o teste MOT foi feito
             $table->decimal('cobrar_test_mot', 10, 2)->nullable(); // Valor a ser cobrado pelo teste MOT
+            $table->integer('horas_reparacao')->nullable(); // Horas de reparação
             $table->timestamps(); // Colunas created_at e updated_at
         });
     }
