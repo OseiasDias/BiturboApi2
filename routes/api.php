@@ -15,7 +15,7 @@ use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\CorController;
 use App\Http\Controllers\OrdemDeServicoController;
 use App\Http\Controllers\OrdemDeReparacaoController;
-
+use App\Http\Controllers\SenhaController;
 use App\Http\Controllers\FacturaController;
 use App\Http\Controllers\GatepassController;
 use App\Http\Controllers\TaxaController;
@@ -54,6 +54,18 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Routes Empresa
 
 // Routes Rodape
+
+// routes/api.php
+
+
+
+// Rotas para a entidade Senha
+Route::get('/senhas', [SenhaController::class, 'index']);  // Listar todas as senhas
+Route::get('/senhas/{id}', [SenhaController::class, 'show']);  // Exibir uma senha específica
+Route::post('/senhas', [SenhaController::class, 'store']);  // Criar uma nova senha
+Route::put('/senhas/{id}', [SenhaController::class, 'update']);  // Atualizar uma senha existente
+Route::delete('/senhas/{id}', [SenhaController::class, 'destroy']);  // Deletar uma senha
+Route::post('/senhas/{id}/verificar', [SenhaController::class, 'verifyPassword']);
 
 
 
@@ -324,6 +336,8 @@ Route::put('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'update'
 // Rota para deletar uma ordem de reparo
 Route::delete('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'destroy']);
 
+// Rota para retornar o maior ID
+Route::get('/ordens-de-reparo/max-id', [OrdemDeReparacaoController::class, 'getMaxId']);
 
 //Routes Get Pass
 

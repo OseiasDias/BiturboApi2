@@ -71,4 +71,24 @@ class OrdemDeReparacaoController extends Controller
 
         return response()->json(['message' => 'Ordem excluída com sucesso']);
     }
+
+     
+
+     public function getMaxId()
+{
+    // Obtendo o maior ID da tabela
+    $maxId = OrdemDeReparacao::max('id');
+
+    // Verificando se existe algum ID (caso contrário, a tabela pode estar vazia)
+    if ($maxId !== null) {
+        return response()->json(['max_id' => $maxId]);
+    } else {
+        // Retorna uma mensagem de erro caso a tabela esteja vazia
+        return response()->json(['message' => 'Nenhuma ordem encontrada'], 404);
+    }
+}
+
+
+
+    
 }
