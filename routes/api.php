@@ -187,6 +187,12 @@ Route::post('funcionarios/login', [FuncionarioController::class, 'login']);
 // Rota para alternar o bloqueio de um funcionário específico
 Route::post('funcionarios/{id}/bloqueio', [FuncionarioController::class, 'toggleBloqueio']);
 
+
+Route::get('/funcionario/numero/{numero_funcionario}', [FuncionarioController::class, 'getByNumeroFuncionario']);
+
+
+// Rota para obter o último ID inserido na tabela
+Route::get('/funcionarios/ultimo-id', [FuncionarioController::class, 'getLastId']);
 //ROutes para Clientes
 
 
@@ -336,8 +342,12 @@ Route::put('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'update'
 // Rota para deletar uma ordem de reparo
 Route::delete('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'destroy']);
 
-// Rota para retornar o maior ID
-Route::get('/ordens-de-reparo/max-id', [OrdemDeReparacaoController::class, 'getMaxId']);
+Route::get('/ordens/ultimo-id', [OrdemDeReparacaoController::class, 'getLastId']);
+
+
+
+
+Route::get('/ordens-de-reparo/numero-trabalho/{numero_trabalho}', [OrdemDeReparacaoController::class, 'showByNumeroTrabalho']);
 
 //Routes Get Pass
 
@@ -506,11 +516,6 @@ Route::prefix('tipos-combustiveis')->group(function () {
     Route::post('/', [TipoCombustivelController::class, 'store']); // Criar um novo tipo de combustível
     Route::delete('{id}', [TipoCombustivelController::class, 'destroy']); // Deletar um tipo de combustível
 });
-
-
-//ROutes fornecedor
-
-
 
 
 

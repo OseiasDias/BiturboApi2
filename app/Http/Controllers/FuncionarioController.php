@@ -29,6 +29,7 @@ class FuncionarioController extends Controller
     {
         // Validação com campos adicionais
         $validatedData = $request->validate([
+            'numero_funcionario' => 'required|string',
             'nome' => 'required|string|max:255',
             'sobrenome' => 'required|string|max:255',
             'dataNascimento' => 'required|date',
@@ -49,12 +50,13 @@ class FuncionarioController extends Controller
             'endereco' => 'required|string',
             'bloqueado' => 'nullable|boolean',
         ]);
-
+    
         // Criação do novo funcionário
         $funcionario = Funcionario::create($validatedData);
-
+    
         return response()->json($funcionario, 201);
     }
+    
 
     // Método para atualizar um funcionário existente
     public function update(Request $request, $id)
@@ -64,9 +66,11 @@ class FuncionarioController extends Controller
         if (!$funcionario) {
             return response()->json(['message' => 'Funcionario não encontrado'], 404);
         }
-
+    
         // Validação com campos adicionais
         $validatedData = $request->validate([
+            'numero_funcionario' => 'required|string',
+             // Permitindo atualizar o número do próprio funcionário
             'nome' => 'string|max:255',
             'sobrenome' => 'string|max:255',
             'dataNascimento' => 'date',
@@ -87,12 +91,13 @@ class FuncionarioController extends Controller
             'endereco' => 'string',
             'bloqueado' => 'nullable|boolean',
         ]);
-
+    
         // Atualizando os dados do funcionário
         $funcionario->update($validatedData);
-
+    
         return response()->json($funcionario);
     }
+    
 
     // Método para deletar um funcionário
     public function destroy($id)
@@ -107,4 +112,31 @@ class FuncionarioController extends Controller
         $funcionario->delete();
         return response()->json(['message' => 'Funcionario deletado com sucesso']);
     }
+
+    public function getByNumeroFuncionario($numero_funcionario)
+{
+    // Buscar funcionário pelo número de funcionário
+    $funcionario = Funcionario::where('numero_funcionario', $numero_funcionario)->first();
+
+    // Verificar se o funcionário foi encontrado
+    if (!$funcionario) {
+        return response()->json(['message' => 'Funcionário não encontrado'], 404);
+    }
+
+    return response()->json($funcionario);
+}
+
+  // Método para buscar o último ID inserido na tabela
+  public function getLastId()
+  {
+      // Obtém o último funcionário baseado no campo 'id'
+      $ultimoFuncionario = Funcionario::latest('id')->first();
+  
+      // Se houver um registro, incrementa o ID em 1, caso contrário, começa com o número 1
+      $ultimoId = $ultimoFuncionario ? $ultimoFuncionario->id + 1 : 1;
+  
+      return response()->json(['ultimo_id' => $ultimoId]);
+  }
+
+
 }

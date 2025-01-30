@@ -10,7 +10,9 @@ class Funcionario extends Model
     use HasFactory;
 
     protected $table = 'funcionarios'; // Define o nome da tabela
+
     protected $fillable = [
+        'numero_funcionario', // Adicionado
         'nome',
         'sobrenome',
         'dataNascimento',
@@ -30,5 +32,5 @@ class Funcionario extends Model
         'cidade',
         'endereco',
         'bloqueado'
-    ]; // Define os campos que podem ser preenchidos
+    ]; // Incluindo 'numero_funcionario' na lista de campos preenchíveis
 }

@@ -10,6 +10,7 @@ class CreateFuncionariosTable extends Migration
     {
         Schema::create('funcionarios', function (Blueprint $table) {
             $table->id();
+            $table->string('numero_funcionario')->unique();  // Campo para o número do funcionário (adicionado)
             $table->string('nome');
             $table->string('sobrenome');
             $table->date('dataNascimento');

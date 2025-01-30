@@ -75,19 +75,35 @@ class OrdemDeReparacaoController extends Controller
 
      
 
-     public function getMaxId()
-{
-    // Obtendo o maior ID da tabela
-    $maxId = OrdemDeReparacao::max('id');
+   
 
-    // Verificando se existe algum ID (caso contrário, a tabela pode estar vazia)
-    if ($maxId !== null) {
-        return response()->json(['max_id' => $maxId]);
-    } else {
-        // Retorna uma mensagem de erro caso a tabela esteja vazia
-        return response()->json(['message' => 'Nenhuma ordem encontrada'], 404);
+    public function getLastId()
+    {
+        // Obtém o último registro baseado no campo 'id'
+        $ultimaOrdem = OrdemDeReparacao::latest('id')->first();
+    
+        // Se houver um registro, incrementa o ID em 1, caso contrário, começa com o número 1
+        $ultimoId = $ultimaOrdem ? $ultimaOrdem->id + 1 : 1;
+    
+        return response()->json(['ultimo_id' => $ultimoId]);
     }
-}
+    
+
+
+    // Nova função para buscar uma ordem pelo numero_trabalho
+    public function showByNumeroTrabalho($numero_trabalho)
+    {
+        // Buscando a ordem pelo numero_trabalho
+        $ordem = OrdemDeReparacao::where('numero_trabalho', $numero_trabalho)->first();
+
+        // Verificando se a ordem foi encontrada
+        if (!$ordem) {
+            return response()->json(['message' => 'Ordem de reparação não encontrada'], 404);
+        }
+
+        return response()->json($ordem);
+    }
+
 
 
 
