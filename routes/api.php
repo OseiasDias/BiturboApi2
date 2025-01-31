@@ -13,7 +13,6 @@ use App\Http\Controllers\VeiculoController;
 use App\Http\Controllers\TipoVeiculoController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\CorController;
-use App\Http\Controllers\OrdemDeServicoController;
 use App\Http\Controllers\OrdemDeReparacaoController;
 use App\Http\Controllers\SenhaController;
 use App\Http\Controllers\FacturaController;
@@ -192,8 +191,10 @@ Route::get('/funcionario/numero/{numero_funcionario}', [FuncionarioController::c
 
 
 // Rota para obter o último ID inserido na tabela
-Route::get('/funcionarios/ultimo-id', [FuncionarioController::class, 'getLastId']);
+Route::get('funcionariosUltimo/ultimo-id', [FuncionarioController::class, 'getLastId']);
 //ROutes para Clientes
+
+
 
 
 
@@ -296,15 +297,8 @@ Route::prefix('cores')->group(function () {
 });
 
 
-// Routes ordem de servico
 
 
-
-Route::get('ordens-de-servico', [OrdemDeServicoController::class, 'index']);
-Route::get('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'show']);
-Route::post('ordens-de-servico', [OrdemDeServicoController::class, 'store']);
-Route::put('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'update']);
-Route::delete('ordens-de-servico/{id}', [OrdemDeServicoController::class, 'destroy']);
 
 
 //Faturas Routes

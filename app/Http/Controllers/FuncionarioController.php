@@ -126,17 +126,20 @@ class FuncionarioController extends Controller
     return response()->json($funcionario);
 }
 
-  // Método para buscar o último ID inserido na tabela
-  public function getLastId()
-  {
-      // Obtém o último funcionário baseado no campo 'id'
-      $ultimoFuncionario = Funcionario::latest('id')->first();
   
-      // Se houver um registro, incrementa o ID em 1, caso contrário, começa com o número 1
-      $ultimoId = $ultimoFuncionario ? $ultimoFuncionario->id + 1 : 1;
-  
-      return response()->json(['ultimo_id' => $ultimoId]);
-  }
+
+public function getLastId()
+{
+    // Obtém o último registro baseado no campo 'id' da tabela de funcionários
+    $ultimoFuncionario = Funcionario::latest('id')->first();
+
+    // Se houver um registro, incrementa o ID em 1, caso contrário, começa com o número 1
+    $ultimoId = $ultimoFuncionario ? $ultimoFuncionario->id + 1 : 1;
+
+    return response()->json(['ultimo_id' => $ultimoId]);
+}
+
+
 
 
 }
