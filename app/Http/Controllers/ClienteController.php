@@ -38,6 +38,7 @@ class ClienteController extends Controller
         $validator = Validator::make($request->all(), [
             'primeiro_nome' => 'required|string|max:50',
             'sobrenome' => 'required|string|max:50',
+            'numero_cliente' => 'required|string',
             'celular' => 'required|string|unique:clientes,celular',
             'email' => 'required|email|unique:clientes,email',
             'senha' => 'required|string|min:8',
@@ -88,6 +89,7 @@ class ClienteController extends Controller
         $validator = Validator::make($request->all(), [
             'celular' => 'nullable|string|unique:clientes,celular,' . $cliente->id,
             'email' => 'nullable|email|unique:clientes,email,' . $cliente->id,
+            'numero_cliente' => 'required|string',
             'senha' => 'nullable|string|min:8',
         ]);
 

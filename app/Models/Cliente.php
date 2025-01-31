@@ -1,6 +1,5 @@
 <?php
 
-
 // app/Models/Cliente.php
 
 namespace App\Models;
@@ -14,28 +13,29 @@ class Cliente extends Model
 {
     use HasFactory, Notifiable;
 
-  protected $fillable = [
-    'primeiro_nome',
-    'sobrenome',
-    'celular',
-    'email',
-    'senha',
-    'bilhete_identidade',
-    'foto',
-    'genero',
-    'nome_empresa',
-    'nif',
-    'telefone_fixo',
-    'pais',
-    'provincia',
-    'municipio',
-    'endereco',
-    'nota',
-    'bloqueado',
-    'arquivo_nota', // Novo campo
-    'interna', // Novo campo
-    'compartilhado', // Novo campo
-];
+    protected $fillable = [
+        'primeiro_nome',
+        'sobrenome',
+        'celular',
+        'email',
+        'senha',
+        'bilhete_identidade',
+        'foto',
+        'genero',
+        'nome_empresa',
+        'nif',
+        'telefone_fixo',
+        'pais',
+        'provincia',
+        'municipio',
+        'endereco',
+        'nota',
+        'bloqueado',
+        'arquivo_nota',
+        'interna',
+        'compartilhado',
+        'numero_cliente',  // Adicionando o campo numero_cliente
+    ];
 
     protected static function boot()
     {
