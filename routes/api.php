@@ -212,6 +212,7 @@ Route::delete('clientes/{id}', [ClienteController::class, 'destroy']);
 Route::post('clientes/login', [ClienteController::class, 'login']);
 Route::post('clientes/{id}/bloqueio', [ClienteController::class, 'toggleBloqueio']);
 
+Route::get('/clientesUltimos/last-id', [ClienteController::class, 'getLastId']);
 //Routes Produtos
 
 

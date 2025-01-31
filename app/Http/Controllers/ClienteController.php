@@ -38,18 +38,19 @@ class ClienteController extends Controller
         $validator = Validator::make($request->all(), [
             'primeiro_nome' => 'required|string|max:50',
             'sobrenome' => 'required|string|max:50',
-            'numero_cliente' => 'required|string',
-            'celular' => 'required|string|unique:clientes,celular',
-            'email' => 'required|email|unique:clientes,email',
+            'numero_cliente' => 'required|string|unique:clientes,numero_cliente', // Aqui garantimos que o 'numero_cliente' seja único
+            'celular' => 'required|string|unique:clientes,celular', // 'celular' deve ser único na tabela
+            'email' => 'required|email|unique:clientes,email', // 'email' deve ser único na tabela
             'senha' => 'required|string|min:8',
             'genero' => 'required|in:masculino,feminino',
             'pais' => 'required|string',
             'endereco' => 'required|string',
-            'arquivo_nota' => 'nullable|file', // Validação para o arquivo
-            'interna' => 'nullable|boolean', // Validação para o checkbox interna
-            'compartilhado' => 'nullable|boolean', // Validação para o checkbox compartilhado
-            'foto' => 'nullable|string', // Alteração aqui para aceitar string normal para a foto
+            'arquivo_nota' => 'nullable|string',
+            'interna' => 'nullable|boolean',
+            'compartilhado' => 'nullable|boolean',
+            'foto' => 'nullable|string',
         ]);
+        
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
@@ -140,6 +141,19 @@ class ClienteController extends Controller
             return response()->json(['message' => 'Credenciais inválidas'], 401);
         }
     }
+
+    public function getLastId()
+{
+    // Obtém o último cliente baseado no campo 'id'
+    $ultimoCliente = Cliente::latest('id')->first();
+    
+    // Se houver um cliente, incrementa o ID em 1, caso contrário, começa com o número 1
+    $ultimoId = $ultimoCliente ? $ultimoCliente->id + 1 : 1;
+
+    // Retorna o próximo ID
+    return response()->json(['ultimo_id' => $ultimoId]);
+}
+
 
     public function toggleBloqueio($id)
     {
