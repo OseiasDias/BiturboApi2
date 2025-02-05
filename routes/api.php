@@ -545,3 +545,6 @@ Route::put('/ordem-de-reparacao-servico/{id}', [OrdemDeReparacaoServicoControlle
 
 // Rota para deletar um registro específico
 Route::delete('/ordem-de-reparacao-servico/{id}', [OrdemDeReparacaoServicoController::class, 'destroy']);
+
+// Rota para retornar serviços de uma ordem de reparação
+Route::get('/ordem-de-reparacao-servicoU/{ordemDeReparacaoId}', [OrdemDeReparacaoServicoController::class, 'getServicosByOrdem']);

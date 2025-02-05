@@ -64,6 +64,22 @@ class OrdemDeReparacaoServicoController extends Controller
         return response()->json($ordemDeReparacaoServico);
     }
 
+
+    public function getServicosByOrdem($ordemDeReparacaoId)
+{
+    // Buscar os serviços relacionados à ordem_de_reparacao_id
+    $ordemDeReparacaoServicos = OrdemDeReparacaoServico::where('ordem_de_reparacao_id', $ordemDeReparacaoId)
+        ->with('servico') // Usando o relacionamento para incluir os dados da tabela 'servicos'
+        ->get();
+
+    if ($ordemDeReparacaoServicos->isEmpty()) {
+        return response()->json(['message' => 'Nenhum serviço encontrado para esta ordem de reparação'], 404);
+    }
+
+    return response()->json($ordemDeReparacaoServicos);
+}
+
+
     // Deletar um registro
     public function destroy($id)
     {
