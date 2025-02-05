@@ -33,6 +33,9 @@ use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\HorariosController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\OrdemDeReparacaoServicoController;
+
+
 
 
 
@@ -521,3 +524,24 @@ Route::post('/suppliers', [SupplierController::class, 'store']);
 Route::put('/suppliers/{id}', [SupplierController::class, 'update']);
 Route::delete('/suppliers/{id}', [SupplierController::class, 'destroy']);
 
+
+
+//ROUTES PARA ORDEM DE SERVICOS E SERVICOS
+
+
+
+
+// Rota para listar todos os registros
+Route::get('/ordem-de-reparacao-servico', [OrdemDeReparacaoServicoController::class, 'index']);
+
+// Rota para exibir um registro específico
+Route::get('/ordem-de-reparacao-servico/{id}', [OrdemDeReparacaoServicoController::class, 'show']);
+
+// Rota para criar um novo registro
+Route::post('/ordem-de-reparacao-servico', [OrdemDeReparacaoServicoController::class, 'store']);
+
+// Rota para atualizar um registro específico
+Route::put('/ordem-de-reparacao-servico/{id}', [OrdemDeReparacaoServicoController::class, 'update']);
+
+// Rota para deletar um registro específico
+Route::delete('/ordem-de-reparacao-servico/{id}', [OrdemDeReparacaoServicoController::class, 'destroy']);
