@@ -105,7 +105,20 @@ class OrdemDeReparacaoController extends Controller
     }
 
 
-
+      // Novo método para retornar apenas o id pela 'numero_trabalho'
+      public function passaonumero_trabalho($numero_trabalho)
+      {
+          // Buscando a ordem pelo numero_trabalho
+          $ordem = OrdemDeReparacao::where('numero_trabalho', $numero_trabalho)->first();
+  
+          // Verificando se a ordem foi encontrada
+          if (!$ordem) {
+              return response()->json(['message' => 'Ordem de reparação não encontrada'], 404);
+          }
+  
+          // Retornando apenas o id
+          return response()->json(['id' => $ordem->id]);
+      }
 
     
 }

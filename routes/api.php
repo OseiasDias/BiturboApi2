@@ -342,6 +342,7 @@ Route::delete('ordens-de-reparo/{id}', [OrdemDeReparacaoController::class, 'dest
 
 Route::get('/ordens/ultimo-id', [OrdemDeReparacaoController::class, 'getLastId']);
 
+Route::get('ordens/{numero_trabalho}/id', [OrdemDeReparacaoController::class, 'passaonumero_trabalho']);
 
 
 
