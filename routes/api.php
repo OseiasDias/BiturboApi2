@@ -34,8 +34,33 @@ use App\Http\Controllers\HorariosController;
 use App\Http\Controllers\FooterController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\OrdemDeReparacaoServicoController;
+use App\Http\Controllers\CronometroController;
 
 
+
+
+
+
+
+
+
+// Rota para listar todos os cronômetros
+Route::get('cronometros', [CronometroController::class, 'index']);
+
+// Rota para exibir um cronômetro específico
+Route::get('cronometros/{id}', [CronometroController::class, 'show']);
+
+// Rota para criar um novo cronômetro
+Route::post('cronometros', [CronometroController::class, 'store']);
+
+// Rota para atualizar um cronômetro existente
+Route::put('cronometros/{id}', [CronometroController::class, 'update']);
+
+// Rota para deletar um cronômetro
+Route::delete('cronometros/{id}', [CronometroController::class, 'destroy']);
+
+// Rota para atualizar o progresso e o estado do cronômetro
+Route::put('cronometros/{id}/progress', [CronometroController::class, 'updateProgress']);
 
 
 
