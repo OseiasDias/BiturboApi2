@@ -7,97 +7,78 @@ use Illuminate\Http\Request;
 
 class CronometroController extends Controller
 {
-    // Método para listar todos os cronômetros
+    /**
+     * Exibe uma lista de cronômetros.
+     */
     public function index()
     {
-        $cronometros = Cronometro::all();
+        $cronometros = Cronometro::with(['tecnico', 'ordemReparacao'])->get();
         return response()->json($cronometros);
     }
 
-    // Método para mostrar um cronômetro específico
-    public function show($id)
-    {
-        $cronometro = Cronometro::find($id);
-
-        if (!$cronometro) {
-            return response()->json(['message' => 'Cronômetro não encontrado'], 404);
-        }
-
-        return response()->json($cronometro);
-    }
-
-    // Método para criar um novo cronômetro
+    /**
+     * Armazena um novo cronômetro no banco de dados.
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'NumeroOR' => 'required|string|max:255',
-            'NumeroTecnico' => 'required|string|max:255',
-            'segundosAtual' => 'required|integer',
-            'segundoFinal' => 'required|integer',
-            'numeroHoras' => 'required|integer',
+            'numero_or' => 'required|string|unique:cronometros',
+            'tecnico_id' => 'required|exists:funcionarios,id',
+            'segundos_atual' => 'required|integer',
+            'segundo_final' => 'required|integer',
+            'numero_horas' => 'required|integer',
             'rodando' => 'required|boolean',
             'estado' => 'required|string',
             'progresso' => 'required|integer',
-            'nomeTecnico' => 'required|string|max:255',
-            'defeito' => 'required|string',
-            'acao' => 'required|string|max:255',
-            'data_hora' => 'required|date',
-            'TempoEsgotado' => 'required|boolean',
+            'ordem_reparacao_id' => 'required|exists:ordem_de_reparacao,id',
+            'acao' => 'nullable|string',
+            'tempo_esgotado' => 'required|boolean',
         ]);
 
         $cronometro = Cronometro::create($request->all());
-
         return response()->json($cronometro, 201);
     }
 
-    // Método para atualizar os dados de um cronômetro
+    /**
+     * Exibe os detalhes de um cronômetro específico.
+     */
+    public function show($id)
+    {
+        $cronometro = Cronometro::with(['tecnico', 'ordemReparacao'])->findOrFail($id);
+        return response()->json($cronometro);
+    }
+
+    /**
+     * Atualiza um cronômetro no banco de dados.
+     */
     public function update(Request $request, $id)
     {
-        $cronometro = Cronometro::find($id);
+        $request->validate([
+            'numero_or' => 'sometimes|string|unique:cronometros,numero_or,' . $id,
+            'tecnico_id' => 'sometimes|exists:funcionarios,id',
+            'segundos_atual' => 'sometimes|integer',
+            'segundo_final' => 'sometimes|integer',
+            'numero_horas' => 'sometimes|integer',
+            'rodando' => 'sometimes|boolean',
+            'estado' => 'sometimes|string',
+            'progresso' => 'sometimes|integer',
+            'ordem_reparacao_id' => 'sometimes|exists:ordem_de_reparacao,id',
+            'acao' => 'nullable|string',
+            'tempo_esgotado' => 'sometimes|boolean',
+        ]);
 
-        if (!$cronometro) {
-            return response()->json(['message' => 'Cronômetro não encontrado'], 404);
-        }
-
+        $cronometro = Cronometro::findOrFail($id);
         $cronometro->update($request->all());
-
         return response()->json($cronometro);
     }
 
-    // Método para excluir um cronômetro
+    /**
+     * Remove um cronômetro do banco de dados.
+     */
     public function destroy($id)
     {
-        $cronometro = Cronometro::find($id);
-
-        if (!$cronometro) {
-            return response()->json(['message' => 'Cronômetro não encontrado'], 404);
-        }
-
+        $cronometro = Cronometro::findOrFail($id);
         $cronometro->delete();
-
-        return response()->json(['message' => 'Cronômetro excluído com sucesso']);
-    }
-
-    // Método para atualizar o progresso em tempo real
-    public function updateProgress($id, Request $request)
-    {
-        $cronometro = Cronometro::find($id);
-
-        if (!$cronometro) {
-            return response()->json(['message' => 'Cronômetro não encontrado'], 404);
-        }
-
-        // Atualizando apenas o progresso e rodando
-        $cronometro->progresso = $request->input('progresso');
-        $cronometro->rodando = $request->input('rodando');
-
-        // Se o tempo esgotou, definir o campo TempoEsgotado como verdadeiro
-        if ($cronometro->segundosAtual >= $cronometro->segundoFinal) {
-            $cronometro->TempoEsgotado = true;
-        }
-
-        $cronometro->save();
-
-        return response()->json($cronometro);
+        return response()->json(null, 204);
     }
 }
