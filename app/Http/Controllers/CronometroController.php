@@ -15,10 +15,7 @@ class CronometroController extends Controller
         $cronometros = Cronometro::with(['tecnico', 'ordemReparacao'])->get();
         return response()->json($cronometros);
     }
-
-    /**
-     * Armazena um novo cronômetro no banco de dados.
-     */
+ 
     public function store(Request $request)
     {
         $request->validate([
