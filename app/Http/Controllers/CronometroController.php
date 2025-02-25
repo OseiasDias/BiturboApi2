@@ -78,4 +78,21 @@ class CronometroController extends Controller
         $cronometro->delete();
         return response()->json(null, 204);
     }
+
+
+    /**
+     * Pesquisa o cronômetro pelo número da ordem de reparação e retorna o ID.
+     */
+    public function buscarPorNumeroOr($numero_or) 
+    {
+        // Busca o cronômetro pelo número da ordem de reparação
+        $cronometro = Cronometro::where('numero_or', $numero_or)->first(); 
+        // Verifica se o cronômetro foi encontrado
+        if (!$cronometro) {
+            return response()->json(['message' => 'Cronômetro não encontrado.'], 404);
+        }    
+        // Retorna o tecnico_id em vez do id do cronômetro
+        return response()->json(['tecnico_id' => $cronometro->tecnico_id]);
+    }
+    
 }

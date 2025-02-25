@@ -139,6 +139,21 @@ public function getLastId()
     return response()->json(['ultimo_id' => $ultimoId]);
 }
 
+public function getIdByNumeroFuncionario($numero_funcionario)
+{
+    // Buscar o funcionário pelo número do funcionário
+    $funcionario = Funcionario::where('numero_funcionario', $numero_funcionario)->first();
+
+    // Verificar se o funcionário foi encontrado
+    if (!$funcionario) {
+        return response()->json(['message' => 'Funcionário não encontrado'], 404);
+    }
+
+    // Retornar o id do funcionário encontrado
+    return response()->json(['id' => $funcionario->id]);
+}
+
+
 
 
 

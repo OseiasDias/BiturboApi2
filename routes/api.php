@@ -35,9 +35,18 @@ use App\Http\Controllers\FooterController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\OrdemDeReparacaoServicoController;
 use App\Http\Controllers\CronometroController;
+use App\Http\Controllers\OrdemDeReparacaoCronometroTecnicoController;
 
 
 
+
+Route::prefix('ordem-de-reparacao-cronometro-tecnicos')->group(function () {
+    Route::get('/', [OrdemDeReparacaoCronometroTecnicoController::class, 'index']);  // Exibir todos
+    Route::get('/{id}', [OrdemDeReparacaoCronometroTecnicoController::class, 'show']);  // Exibir por ID
+    Route::post('/', [OrdemDeReparacaoCronometroTecnicoController::class, 'store']);  // Criar novo
+    Route::put('/{id}', [OrdemDeReparacaoCronometroTecnicoController::class, 'update']);  // Atualizar
+    Route::delete('/{id}', [OrdemDeReparacaoCronometroTecnicoController::class, 'destroy']);  // Deletar
+});
 
 
 
@@ -62,27 +71,7 @@ Route::delete('cronometros/{id}', [CronometroController::class, 'destroy']);
 // Rota para atualizar o progresso e o estado do cronômetro
 Route::put('cronometros/{id}/progress', [CronometroController::class, 'updateProgress']);
 
-
-
-
-
-/*
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-
-
-
-
-
-
-// routes/api.php
-// Routes Empresa
-
-// Routes Rodape
-
-// routes/api.php
+Route::get('cronometros/buscar/{numero_or}', [CronometroController::class, 'buscarPorNumeroOr']);
 
 
 
@@ -221,6 +210,11 @@ Route::get('/funcionario/numero/{numero_funcionario}', [FuncionarioController::c
 // Rota para obter o último ID inserido na tabela
 Route::get('funcionariosUltimo/ultimo-id', [FuncionarioController::class, 'getLastId']);
 //ROutes para Clientes
+
+//ROute que pesquis a o funcionario com o seu numero i retorna o id
+
+Route::get('funcionariosIdReturn/id/{numero_funcionario}', [FuncionarioController::class, 'getIdByNumeroFuncionario']);
+
 
 
 
