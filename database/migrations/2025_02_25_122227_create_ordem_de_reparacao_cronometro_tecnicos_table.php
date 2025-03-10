@@ -33,7 +33,7 @@ class CreateOrdemDeReparacaoCronometroTecnicosTable extends Migration
             // Definição das chaves estrangeiras
             $table->foreign('tecnico_id')->references('id')->on('funcionarios')->onDelete('cascade');
             $table->foreign('id_cronometro')->references('id')->on('cronometros')->onDelete('cascade');
-            $table->foreign('ordem_reparacao_id')->references('id')->on('ordem_reparacoes')->onDelete('cascade');
+            $table->foreign('ordem_reparacao_id')->references('id')->on('ordem_de_reparacao')->onDelete('cascade');
 
             $table->timestamps();  // Criar campos created_at e updated_at
         });

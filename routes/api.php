@@ -37,8 +37,7 @@ use App\Http\Controllers\OrdemDeReparacaoServicoController;
 use App\Http\Controllers\CronometroController;
 use App\Http\Controllers\OrdemDeReparacaoCronometroTecnicoController;
 
-
-
+ 
 
 Route::prefix('ordem-de-reparacao-cronometro-tecnicos')->group(function () {
     Route::get('/', [OrdemDeReparacaoCronometroTecnicoController::class, 'index']);  // Exibir todos
@@ -46,10 +45,10 @@ Route::prefix('ordem-de-reparacao-cronometro-tecnicos')->group(function () {
     Route::post('/', [OrdemDeReparacaoCronometroTecnicoController::class, 'store']);  // Criar novo
     Route::put('/{id}', [OrdemDeReparacaoCronometroTecnicoController::class, 'update']);  // Atualizar
     Route::delete('/{id}', [OrdemDeReparacaoCronometroTecnicoController::class, 'destroy']);  // Deletar
+    Route::get('ordemNumero/{numeroOr}', [OrdemDeReparacaoCronometroTecnicoController::class, 'getIdTecnicoByNumeroOr']);
+    Route::put('/update-estado/{numeroOr}', [OrdemDeReparacaoCronometroTecnicoController::class, 'updateEstadoByNumeroOr']);
+
 });
-
-
-
 
 
 

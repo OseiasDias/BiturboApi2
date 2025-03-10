@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrdemDeReparacaoCronometroTecnico extends Model
 {
-    use HasFactory;
+    use HasFactory; 
 
     // Definir a tabela
     protected $table = 'ordem_de_reparacao_cronometro_tecnicos';
@@ -46,7 +46,6 @@ class OrdemDeReparacaoCronometroTecnico extends Model
         return $this->belongsTo(OrdemDeReparacao::class, 'ordem_reparacao_id');
     }
 
-    // Definir acessores, se necessário
     // Exemplo: Para obter o valor do 'estado' em formato mais legível
     public function getEstadoAttribute($value)
     {
