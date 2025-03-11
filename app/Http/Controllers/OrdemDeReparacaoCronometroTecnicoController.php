@@ -118,4 +118,12 @@ class OrdemDeReparacaoCronometroTecnicoController extends Controller
      }
      
 
+        // Mostrar todos os registros, excluindo aqueles com o estado "terminado"
+    public function listarOrdensAtivas()
+    {
+        $ordens = OrdemDeReparacaoCronometroTecnico::where('estado', '!=', 'Terminado')->get();
+        return response()->json($ordens);
+    }
+
+
 }

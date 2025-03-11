@@ -94,5 +94,13 @@ class CronometroController extends Controller
         // Retorna o tecnico_id em vez do id do cronômetro
         return response()->json(['tecnico_id' => $cronometro->tecnico_id]);
     }
+
+            // Mostrar todos os registros, excluindo aqueles com o estado "terminado"
+            public function listarOrdensAtivas()
+            {
+                $ordens = OrdemDeReparacaoCronometroTecnico::where('estado', '!=', 'Terminado')->get();
+                return response()->json($ordens);
+            }
+        
     
 }
