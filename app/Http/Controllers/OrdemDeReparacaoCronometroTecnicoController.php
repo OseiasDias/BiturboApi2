@@ -91,28 +91,31 @@ class OrdemDeReparacaoCronometroTecnicoController extends Controller
      }
 
      // Novo método para atualizar o campo 'estado' baseado no numero_or
-public function updateEstadoByNumeroOr(Request $request, $numeroOr)
-{
-    // Validar o campo 'estado' no corpo da requisição
-    $data = $request->validate([
-        'estado' => 'required|string|max:255',
-    ]);
-
-    // Procurar pela ordem de reparação que tem o numero_or
-    $ordem = OrdemDeReparacaoCronometroTecnico::where('numero_or', $numeroOr)->first();
-
-    // Verificar se foi encontrada uma ordem
-    if ($ordem) {
-        // Atualizar o campo 'estado'
-        $ordem->estado = $data['estado'];
-        $ordem->save();
-
-        // Retornar a ordem atualizada
-        return response()->json($ordem);
-    } else {
-        // Retornar erro caso a ordem não seja encontrada
-        return response()->json(['message' => 'Ordem de Reparação não encontrada'], 404);
-    }
-}
+     public function updateEstadoByTecnicoAndNumeroOr(Request $request, $tecnico_id, $numeroOr)
+     {
+         // Validar os campos 'estado' no corpo da requisição
+         $data = $request->validate([
+             'estado' => 'required|string|max:255',
+         ]);
+     
+         // Procurar pela ordem de reparação que tem o numero_or e o tecnico_id
+         $ordem = OrdemDeReparacaoCronometroTecnico::where('numero_or', $numeroOr)
+                                                      ->where('tecnico_id', $tecnico_id)
+                                                      ->first();
+     
+         // Verificar se foi encontrada uma ordem
+         if ($ordem) {
+             // Atualizar o campo 'estado'
+             $ordem->estado = $data['estado'];
+             $ordem->save();
+     
+             // Retornar a ordem atualizada
+             return response()->json($ordem);
+         } else {
+             // Retornar erro caso a ordem não seja encontrada
+             return response()->json(['message' => 'Ordem de Reparação não encontrada ou técnico não corresponde'], 404);
+         }
+     }
+     
 
 }
