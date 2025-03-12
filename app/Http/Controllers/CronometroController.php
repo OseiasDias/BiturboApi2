@@ -98,7 +98,7 @@ class CronometroController extends Controller
             // Mostrar todos os registros, excluindo aqueles com o estado "terminado"
             public function listarOrdensAtivas()
             {
-                $ordens = OrdemDeReparacaoCronometroTecnico::where('estado', '!=', 'Terminado')->get();
+                $ordens = OrdemDeReparacaoCronometroTecnico::where('estado', '!=', 'Terminado0')->get();
                 return response()->json($ordens);
             }
         
