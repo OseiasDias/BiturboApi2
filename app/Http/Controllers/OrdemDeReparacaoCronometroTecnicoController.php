@@ -93,20 +93,26 @@ class OrdemDeReparacaoCronometroTecnicoController extends Controller
      // Novo método para atualizar o campo 'estado' baseado no numero_or
      public function updateEstadoByTecnicoAndNumeroOr(Request $request, $tecnico_id, $numeroOr)
      {
-         // Validar os campos 'estado' no corpo da requisição
+         // Validar os campos que podem ser atualizados
          $data = $request->validate([
              'estado' => 'required|string|max:255',
+             'segundos_atual' => 'required|integer',
+             'rodando' => 'required|boolean',
          ]);
      
-         // Procurar pela ordem de reparação que tem o numero_or e o tecnico_id
+         // Procurar pela ordem de reparação com base no numero_or e tecnico_id
          $ordem = OrdemDeReparacaoCronometroTecnico::where('numero_or', $numeroOr)
-                                                      ->where('tecnico_id', $tecnico_id)
-                                                      ->first();
+                                                   ->where('tecnico_id', $tecnico_id)
+                                                   ->first();
      
-         // Verificar se foi encontrada uma ordem
+         // Verificar se a ordem foi encontrada
          if ($ordem) {
-             // Atualizar o campo 'estado'
+             // Atualizar os campos
              $ordem->estado = $data['estado'];
+             $ordem->segundos_atual = $data['segundos_atual'];
+             $ordem->rodando = $data['rodando'];
+     
+             // Salvar as alterações no banco de dados
              $ordem->save();
      
              // Retornar a ordem atualizada
@@ -116,6 +122,7 @@ class OrdemDeReparacaoCronometroTecnicoController extends Controller
              return response()->json(['message' => 'Ordem de Reparação não encontrada ou técnico não corresponde'], 404);
          }
      }
+     
      
 
         // Mostrar todos os registros, excluindo aqueles com o estado "terminado"

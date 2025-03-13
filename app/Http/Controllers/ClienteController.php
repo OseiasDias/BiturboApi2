@@ -1,11 +1,9 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Models\Factura;
 use App\Models\OrdemDeServico;
-
-
-
-
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,46 +32,43 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-        // Validação dos campos
         $validator = Validator::make($request->all(), [
             'primeiro_nome' => 'required|string|max:50',
             'sobrenome' => 'required|string|max:50',
-            'numero_cliente' => 'required|string|unique:clientes,numero_cliente', // Aqui garantimos que o 'numero_cliente' seja único
-            'celular' => 'required|string|unique:clientes,celular', // 'celular' deve ser único na tabela
-            'email' => 'required|email|unique:clientes,email', // 'email' deve ser único na tabela
-            'senha' => 'required|string|min:8',
+            'numero_cliente' => 'required|string|unique:clientes,numero_cliente',
+            'celular' => 'required|string|unique:clientes,celular',
+            'email' => 'required|email|unique:clientes,email',
+            'password' => 'required|string|min:8',
             'genero' => 'required|in:masculino,feminino',
             'pais' => 'required|string',
+            'provincia' => 'nullable|string',
+            'municipio' => 'nullable|string',
             'endereco' => 'required|string',
-            'arquivo_nota' => 'nullable|string',
+            'nota' => 'nullable|string',
+            'bloqueado' => 'boolean',
+            'arquivo_nota' => 'nullable|file|max:2048',
             'interna' => 'nullable|boolean',
             'compartilhado' => 'nullable|boolean',
-            'foto' => 'nullable|string',
+            'foto' => 'nullable|file|image|max:2048',
         ]);
-        
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        // Lógica para o upload da foto
         if ($request->hasFile('foto')) {
             $path = $request->file('foto')->store('clientes', 's3');
-            $fotoUrl = Storage::disk('s3')->url($path);
-            $request->merge(['foto' => $fotoUrl]);
+            $request->merge(['foto' => Storage::disk('s3')->url($path)]);
         }
 
-        // Lógica para o upload do arquivo
         if ($request->hasFile('arquivo_nota')) {
             $filePath = $request->file('arquivo_nota')->store('notas', 's3');
-            $arquivoNotaUrl = Storage::disk('s3')->url($filePath);
-            $request->merge(['arquivo_nota' => $arquivoNotaUrl]);
+            $request->merge(['arquivo_nota' => Storage::disk('s3')->url($filePath)]);
         }
 
-        // Criação do cliente
         $cliente = new Cliente();
         $cliente->fill($request->all());
-        $cliente->senha = Hash::make($request->senha);
+        $cliente->password = Hash::make($request->password);
         $cliente->save();
 
         return response()->json($cliente, 201);
@@ -91,15 +86,33 @@ class ClienteController extends Controller
             'celular' => 'nullable|string|unique:clientes,celular,' . $cliente->id,
             'email' => 'nullable|email|unique:clientes,email,' . $cliente->id,
             'numero_cliente' => 'required|string',
-            'senha' => 'nullable|string|min:8',
+            'password' => 'nullable|string|min:8',
+            'foto' => 'nullable|file|image|max:2048',
+            'arquivo_nota' => 'nullable|file|max:2048',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        if ($request->has('senha')) {
-            $request->merge(['senha' => Hash::make($request->senha)]);
+        if ($request->hasFile('foto')) {
+            if ($cliente->foto) {
+                Storage::disk('s3')->delete($cliente->foto);
+            }
+            $path = $request->file('foto')->store('clientes', 's3');
+            $request->merge(['foto' => Storage::disk('s3')->url($path)]);
+        }
+
+        if ($request->hasFile('arquivo_nota')) {
+            if ($cliente->arquivo_nota) {
+                Storage::disk('s3')->delete($cliente->arquivo_nota);
+            }
+            $filePath = $request->file('arquivo_nota')->store('notas', 's3');
+            $request->merge(['arquivo_nota' => Storage::disk('s3')->url($filePath)]);
+        }
+
+        if ($request->has('password')) {
+            $request->merge(['password' => Hash::make($request->password)]);
         }
 
         $cliente->update($request->all());
@@ -107,34 +120,42 @@ class ClienteController extends Controller
     }
 
     public function destroy($id)
-{
-    $cliente = Cliente::find($id);
+    {
+        $cliente = Cliente::find($id);
 
-    if (!$cliente) {
-        return response()->json(['message' => 'Cliente não encontrado'], 404);
+        if (!$cliente) {
+            return response()->json(['message' => 'Cliente não encontrado'], 404);
+        }
+
+        // Excluir arquivos do S3 antes de deletar o cliente
+        if ($cliente->foto) {
+            Storage::disk('s3')->delete($cliente->foto);
+        }
+        if ($cliente->arquivo_nota) {
+            Storage::disk('s3')->delete($cliente->arquivo_nota);
+        }
+
+        // Excluir registros relacionados
+        Factura::where('cliente_id', $id)->delete();
+        OrdemDeServico::where('cust_id', $id)->delete();
+
+        $cliente->delete();
+
+        return response()->json(['message' => 'Cliente excluído com sucesso']);
     }
 
-    // Deletar os registros relacionados manualmente
-    Factura::where('cliente_id', $id)->delete(); // Exclui faturas do cliente
-    OrdemDeServico::where('cust_id ', $id)->delete(); // Exclui ordens de serviço do cliente
-
-    // Agora, excluir o cliente
-    $cliente->delete();
-
-    return response()->json(['message' => 'Cliente excluído com sucesso']);
-}
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'senha' => 'required|string',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->senha])) {
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $cliente = Auth::user();
             return response()->json($cliente);
         } else {
@@ -143,17 +164,11 @@ class ClienteController extends Controller
     }
 
     public function getLastId()
-{
-    // Obtém o último cliente baseado no campo 'id'
-    $ultimoCliente = Cliente::latest('id')->first();
-    
-    // Se houver um cliente, incrementa o ID em 1, caso contrário, começa com o número 1
-    $ultimoId = $ultimoCliente ? $ultimoCliente->id + 1 : 1;
-
-    // Retorna o próximo ID
-    return response()->json(['ultimo_id' => $ultimoId]);
-}
-
+    {
+        $ultimoCliente = Cliente::latest('id')->first();
+        $ultimoId = $ultimoCliente ? $ultimoCliente->id + 1 : 1;
+        return response()->json(['ultimo_id' => $ultimoId]);
+    }
 
     public function toggleBloqueio($id)
     {
@@ -169,7 +184,3 @@ class ClienteController extends Controller
         return response()->json($cliente);
     }
 }
-
-
-
-

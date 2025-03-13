@@ -1,3 +1,4 @@
+
 <?php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -13,7 +14,7 @@ class CreateClientesTable extends Migration
             $table->string('sobrenome');
             $table->string('celular');
             $table->string('email')->unique();
-            $table->string('senha');
+            $table->string('password');
             $table->string('bilhete_identidade')->nullable();
             $table->string('foto')->nullable();
             $table->enum('genero', ['masculino', 'feminino']);

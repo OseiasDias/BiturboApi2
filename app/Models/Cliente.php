@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Cliente.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,7 +16,7 @@ class Cliente extends Model
         'sobrenome',
         'celular',
         'email',
-        'senha',
+        'password',
         'bilhete_identidade',
         'foto',
         'genero',
@@ -34,7 +32,7 @@ class Cliente extends Model
         'arquivo_nota',
         'interna',
         'compartilhado',
-        'numero_cliente',  // Adicionando o campo numero_cliente
+        'numero_cliente',
     ];
 
     protected static function boot()
@@ -42,13 +40,13 @@ class Cliente extends Model
         parent::boot();
 
         static::saving(function ($model) {
-            if ($model->isDirty('senha')) {
-                $model->senha = Hash::make($model->senha);
+            if ($model->isDirty('password') && $model->password) {
+                $model->password = Hash::make($model->password);
             }
         });
     }
 
     protected $hidden = [
-        'senha',
+        'password',
     ];
 }

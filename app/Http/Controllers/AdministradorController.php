@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/AdministradorController.php
-
 namespace App\Http\Controllers;
 
 use App\Models\Administrador;
@@ -25,11 +23,16 @@ class AdministradorController extends Controller
         $validator = Validator::make($request->all(), [
             'nome' => 'required|string|max:255',
             'sobrenome' => 'required|string|max:255',
+            'data_nascimento' => 'nullable|date',
             'email' => 'required|email|unique:administradores,email',
-            'senha' => 'required|string|min:8',
+            'password' => 'required|string|min:8', // 🔄 Alterado de 'senha' para 'password'
+            'foto' => 'nullable|string',
+            'genero' => 'required|in:masculino,feminino',
             'celular' => 'required|string|max:255|unique:administradores,celular',
+            'telefone_fixo' => 'nullable|string|max:255',
             'filial' => 'required|string|max:255',
             'cargo' => 'required|string|max:255',
+            'nome_exibicao' => 'nullable|string|max:255',
             'data_admissao' => 'required|date',
             'pais' => 'required|string|max:255',
             'estado' => 'required|string|max:255',
@@ -41,7 +44,28 @@ class AdministradorController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $administrador = Administrador::create($request->all());
+        // Criar o administrador com a senha hash
+        $administrador = Administrador::create([
+            'nome' => $request->nome,
+            'sobrenome' => $request->sobrenome,
+            'data_nascimento' => $request->data_nascimento,
+            'email' => $request->email,
+            'foto' => $request->foto,
+            'genero' => $request->genero,
+            'password' => Hash::make($request->password), // 🔒 Hash na senha
+            'celular' => $request->celular,
+            'telefone_fixo' => $request->telefone_fixo,
+            'filial' => $request->filial,
+            'cargo' => $request->cargo,
+            'nome_exibicao' => $request->nome_exibicao,
+            'data_admissao' => $request->data_admissao,
+            'pais' => $request->pais,
+            'estado' => $request->estado,
+            'cidade' => $request->cidade,
+            'endereco' => $request->endereco,
+            'remember_token' => null,
+        ]);
+
         return response()->json($administrador, 201);
     }
 
@@ -56,7 +80,41 @@ class AdministradorController extends Controller
     public function update(Request $request, $id)
     {
         $administrador = Administrador::findOrFail($id);
-        $administrador->update($request->all());
+
+        $validator = Validator::make($request->all(), [
+            'nome' => 'sometimes|string|max:255',
+            'sobrenome' => 'sometimes|string|max:255',
+            'data_nascimento' => 'nullable|date',
+            'email' => 'sometimes|email|unique:administradores,email,' . $id,
+            'password' => 'nullable|string|min:8',
+            'foto' => 'nullable|string',
+            'genero' => 'sometimes|in:masculino,feminino',
+            'celular' => 'sometimes|string|max:255|unique:administradores,celular,' . $id,
+            'telefone_fixo' => 'nullable|string|max:255',
+            'filial' => 'sometimes|string|max:255',
+            'cargo' => 'sometimes|string|max:255',
+            'nome_exibicao' => 'nullable|string|max:255',
+            'data_admissao' => 'sometimes|date',
+            'pais' => 'sometimes|string|max:255',
+            'estado' => 'sometimes|string|max:255',
+            'cidade' => 'sometimes|string|max:255',
+            'endereco' => 'sometimes|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        // Atualizar os dados
+        $administrador->fill($request->except('password'));
+
+        // Se o campo 'password' foi enviado, aplicar hash antes de salvar
+        if ($request->has('password')) {
+            $administrador->password = Hash::make($request->password);
+        }
+
+        $administrador->save();
+
         return response()->json($administrador);
     }
 
@@ -73,18 +131,21 @@ class AdministradorController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'senha' => 'required|string',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'senha' => $request->senha])) {
-            $administrador = Auth::user();
-            return response()->json(['token' => $administrador->createToken('API Token')->plainTextToken]);
+        $administrador = Administrador::where('email', $request->email)->first();
+
+        if (!$administrador || !Hash::check($request->password, $administrador->password)) {
+            return response()->json(['message' => 'Credenciais inválidas.'], 401);
         }
 
-        return response()->json(['message' => 'Credenciais inválidas.'], 401);
+        return response()->json([
+            'token' => $administrador->createToken('API Token')->plainTextToken
+        ]);
     }
 }

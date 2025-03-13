@@ -1,32 +1,49 @@
 <?php
 
-// app/Models/Administrador.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Administrador extends Model
+class Administrador extends Authenticatable
 {
-    use HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     // Tabela associada ao modelo
     protected $table = 'administradores';
 
     // Campos que podem ser preenchidos
     protected $fillable = [
-        'nome', 'sobrenome', 'data_nascimento', 'email', 'foto', 'genero', 'senha',
-        'celular', 'telefone_fixo', 'filial', 'cargo', 'nome_exibicao', 'data_admissao',
-        'pais', 'estado', 'cidade', 'endereco',
+        'nome',
+        'sobrenome',
+        'data_nascimento',
+        'email',
+        'foto',
+        'genero',
+        'password', // 🔄 Alterado de 'senha' para 'password'
+        'celular',
+        'telefone_fixo',
+        'filial',
+        'cargo',
+        'nome_exibicao',
+        'data_admissao',
+        'pais',
+        'estado',
+        'cidade',
+        'endereco',
+        'remember_token', // 🔄 Adicionado para autenticação persistente
     ];
 
-    // Usar mutators para criptografar a senha
-    protected $hidden = ['senha'];
+    // Esconder campos sensíveis nas respostas JSON
+    protected $hidden = ['password', 'remember_token'];
 
-    // Método para acessar a senha de forma segura
-    public function setSenhaAttribute($value)
+    // Mutator para criptografar a senha antes de salvar
+    public function setPasswordAttribute($value)
     {
-        $this->attributes['senha'] = bcrypt($value); // Criptografar a senha ao salvá-la
+        if (!empty($value)) {
+            $this->attributes['password'] = bcrypt($value);
+        }
     }
 }

@@ -1,3 +1,4 @@
+
 <?php
 // database/migrations/xxxx_xx_xx_xxxxxx_create_senhas_table.php
 
@@ -11,7 +12,7 @@ class CreateSenhasTable extends Migration
     {
         Schema::create('senhas', function (Blueprint $table) {
             $table->id();  // ID da senha
-            $table->string('senha');  // Campo para armazenar a senha
+            $table->string('password');  // Campo para armazenar a senha
             $table->timestamps();  // Data de criação e atualização
         });
     }

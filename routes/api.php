@@ -49,6 +49,8 @@ Route::prefix('ordem-de-reparacao-cronometro-tecnicos')->group(function () {
    //Route::put('/update-estado/{numeroOr}', [OrdemDeReparacaoCronometroTecnicoController::class, 'updateEstadoByNumeroOr']);
     Route::put('/update-estado/{tecnico_id}/{numeroOr}', [OrdemDeReparacaoCronometroTecnicoController::class, 'updateEstadoByTecnicoAndNumeroOr']);
     Route::get('/ordens/ativas', [OrdemDeReparacaoCronometroTecnicoController::class, 'listarOrdensAtivas']);
+    // Atualizar estado pelo técnico e número da ordem
+    //Route::put('/{tecnico_id}/{numeroOr}', [OrdemDeReparacaoCronometroTecnicoController::class, 'updateEstadoByTecnicoAndNumeroOr']);
 
 });
 
@@ -77,7 +79,6 @@ Route::get('cronometros/buscar/{numero_or}', [CronometroController::class, 'busc
 Route::get('cronometros/ordens/ativas', [OrdemDeReparacaoCronometroTecnicoController::class, 'listarOrdensAtivas']);
 
 
-
 // Rotas para a entidade Senha
 Route::get('/senhas', [SenhaController::class, 'index']);  // Listar todas as senhas
 Route::get('/senhas/{id}', [SenhaController::class, 'show']);  // Exibir uma senha específica
@@ -85,9 +86,6 @@ Route::post('/senhas', [SenhaController::class, 'store']);  // Criar uma nova se
 Route::put('/senhas/{id}', [SenhaController::class, 'update']);  // Atualizar uma senha existente
 Route::delete('/senhas/{id}', [SenhaController::class, 'destroy']);  // Deletar uma senha
 Route::post('/senhas/{id}/verificar', [SenhaController::class, 'verifyPassword']);
-
-
-
 
 
 // Prefixo para as rotas relacionadas ao Footer

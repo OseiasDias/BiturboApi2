@@ -1,5 +1,4 @@
 <?php
-// database/migrations/xxxx_xx_xx_xxxxxx_create_administradores_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,7 +16,7 @@ class CreateAdministradoresTable extends Migration
             $table->string('email')->unique();
             $table->string('foto')->nullable();
             $table->enum('genero', ['masculino', 'feminino']);
-            $table->string('senha');
+            $table->string('password'); // 🔄 Alterado de 'senha' para 'password'
             $table->string('celular')->unique();
             $table->string('telefone_fixo')->nullable();
             $table->string('filial');
@@ -28,6 +27,7 @@ class CreateAdministradoresTable extends Migration
             $table->string('estado');
             $table->string('cidade');
             $table->text('endereco');
+            $table->rememberToken(); // 🔄 Adicionado para autenticação
             $table->timestamps();
         });
     }
