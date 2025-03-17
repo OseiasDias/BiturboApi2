@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Senha;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class SenhaController extends Controller
 {
@@ -13,12 +12,12 @@ class SenhaController extends Controller
     {
         // Validação do campo senha
         $request->validate([
-            'password' => 'required|string|min:6',  // Valida que a senha seja uma string com no mínimo 6 caracteres
+            'password' => 'required|string|min:6',  // Senha deve ser string com no mínimo 6 caracteres
         ]);
 
-        // Criação de uma nova senha
+        // Criando uma nova senha sem criptografia
         $senha = Senha::create([
-            'password' => Hash::make($request->password),  // Criptografando a senha
+            'password' => $request->password, // Armazena a senha como string normal
         ]);
 
         return response()->json([
@@ -52,15 +51,15 @@ class SenhaController extends Controller
     {
         // Validação do campo senha
         $request->validate([
-            'password' => 'required|string|min:6',  // Valida que a senha seja uma string com no mínimo 6 caracteres
+            'password' => 'required|string|min:6',
         ]);
 
         // Encontrando a senha pelo ID
         $senha = Senha::findOrFail($id);
 
-        // Atualizando a senha
+        // Atualizando a senha sem criptografia
         $senha->update([
-            'password' => Hash::make($request->password),  // Criptografando a nova senha
+            'password' => $request->password, // Armazena a senha como string normal
         ]);
 
         return response()->json([
@@ -72,10 +71,7 @@ class SenhaController extends Controller
     // Deletar uma senha (Delete)
     public function destroy($id)
     {
-        // Encontrando a senha pelo ID
         $senha = Senha::findOrFail($id);
-
-        // Deletando a senha
         $senha->delete();
 
         return response()->json([
@@ -83,35 +79,26 @@ class SenhaController extends Controller
         ]);
     }
 
-    // Função para verificar a senha
+    // Verificar a senha (agora sem criptografia)
     public function verifyPassword(Request $request, $id)
     {
-        // Logando os dados da requisição para verificar o que está sendo enviado
-        \Log::info('Dados recebidos para verificação: ', ['password_recebida' => $request->password]);
-
         // Validação do campo senha
         $request->validate([
-            'password' => 'required|string|min:6',  // Valida que a senha seja uma string com no mínimo 6 caracteres
+            'password' => 'required|string|min:6',
         ]);
 
-        // Encontrando a senha pelo ID
         try {
-            $senha = Senha::findOrFail($id); // Caso não encontre, vai lançar uma exceção
+            $senha = Senha::findOrFail($id);
         } catch (\Exception $e) {
-            \Log::error('Erro ao encontrar a senha no banco de dados: ' . $e->getMessage());
             return response()->json(['message' => 'Erro ao buscar senha no banco de dados.'], 500);
         }
 
-        // Logando a senha armazenada no banco (apenas para debug)
-        \Log::info('Senha armazenada no banco: ', ['password_banco' => $senha->password]);
-
-        // Verificando se a senha fornecida corresponde à senha criptografada
-        if (Hash::check($request->password, $senha->password)) {
+        // Comparação direta da senha sem hash
+        if ($request->password === $senha->password) {
             return response()->json([
                 'message' => 'Senha verificada com sucesso!',
             ]);
         } else {
-            \Log::warning('Senha incorreta fornecida para o ID: ' . $id);
             return response()->json([
                 'message' => 'Senha inválida!',
             ], 400);

@@ -139,25 +139,17 @@ Route::put('empresas/{id}', [EmpresaController::class, 'update']);
 Route::delete('empresas/{id}', [EmpresaController::class, 'destroy']);
 
 
-
-//Routes Administrador
-
-
-Route::prefix('administradores')->group(function () {
-    Route::get('/', [AdministradorController::class, 'index']);  // Listar todos os administradores
-    Route::get('{id}', [AdministradorController::class, 'show']);  // Exibir detalhes de um administrador
-    Route::post('/', [AdministradorController::class, 'store']); // Criar um novo administrador
-    Route::put('{id}', [AdministradorController::class, 'update']); // Atualizar um administrador
-    Route::delete('{id}', [AdministradorController::class, 'destroy']); // Deletar um administrador
-    Route::post('login', [AdministradorController::class, 'login']); // Login do administrador
-});
+Route::get('/administradores', [AdministradorController::class, 'index']);
+Route::get('/administradores/{id}', [AdministradorController::class, 'show']);
+Route::put('/administradores/{id}', [AdministradorController::class, 'update']);
+Route::delete('/administradores/{id}', [AdministradorController::class, 'destroy']);
+Route::post('/logout', [AdministradorController::class, 'logout']);
 
 
+// Rotas públicas
+Route::post('/administradores', [AdministradorController::class, 'store']);
+Route::post('/administradores/loginAdmin', [AdministradorController::class, 'login']);
 //Routes Para equipe de suporte
-
-
-
-
 Route::get('equipe-suporte', [EquipeSuporteController::class, 'index']); // Para listar todos
 Route::get('equipe-suporte/{id}', [EquipeSuporteController::class, 'show']); // Para mostrar um único registro
 Route::post('equipe-suporte', [EquipeSuporteController::class, 'store']); // Para criar um novo
@@ -232,8 +224,9 @@ Route::get('clientes/{id}', [ClienteController::class, 'show']);
 Route::post('clientes', [ClienteController::class, 'store']);
 Route::put('clientes/{id}', [ClienteController::class, 'update']);
 Route::delete('clientes/{id}', [ClienteController::class, 'destroy']);
-Route::post('clientes/login', [ClienteController::class, 'login']);
+//Route::post('clientes/login', [ClienteController::class, 'login']);
 Route::post('clientes/{id}/bloqueio', [ClienteController::class, 'toggleBloqueio']);
+Route::post('/clientes/login', [ClienteController::class, 'buscarClientePorEmailESenha']);
 
 Route::get('/clientesUltimos/last-id', [ClienteController::class, 'getLastId']);
 //Routes Produtos

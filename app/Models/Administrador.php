@@ -11,10 +11,8 @@ class Administrador extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    // Tabela associada ao modelo
     protected $table = 'administradores';
 
-    // Campos que podem ser preenchidos
     protected $fillable = [
         'nome',
         'sobrenome',
@@ -22,7 +20,7 @@ class Administrador extends Authenticatable
         'email',
         'foto',
         'genero',
-        'password', // 🔄 Alterado de 'senha' para 'password'
+        'password',
         'celular',
         'telefone_fixo',
         'filial',
@@ -33,17 +31,16 @@ class Administrador extends Authenticatable
         'estado',
         'cidade',
         'endereco',
-        'remember_token', // 🔄 Adicionado para autenticação persistente
     ];
 
-    // Esconder campos sensíveis nas respostas JSON
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-    // Mutator para criptografar a senha antes de salvar
-    public function setPasswordAttribute($value)
-    {
-        if (!empty($value)) {
-            $this->attributes['password'] = bcrypt($value);
-        }
-    }
+    protected $casts = [
+        'password' => 'hashed',
+        'data_nascimento' => 'date',
+        'data_admissao' => 'date',
+    ];
 }

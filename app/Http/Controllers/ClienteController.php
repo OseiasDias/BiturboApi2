@@ -7,7 +7,6 @@ use App\Models\OrdemDeServico;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -68,7 +67,6 @@ class ClienteController extends Controller
 
         $cliente = new Cliente();
         $cliente->fill($request->all());
-        $cliente->password = Hash::make($request->password);
         $cliente->save();
 
         return response()->json($cliente, 201);
@@ -111,10 +109,6 @@ class ClienteController extends Controller
             $request->merge(['arquivo_nota' => Storage::disk('s3')->url($filePath)]);
         }
 
-        if ($request->has('password')) {
-            $request->merge(['password' => Hash::make($request->password)]);
-        }
-
         $cliente->update($request->all());
         return response()->json($cliente);
     }
@@ -144,7 +138,9 @@ class ClienteController extends Controller
         return response()->json(['message' => 'Cliente excluído com sucesso']);
     }
 
-    public function login(Request $request)
+
+
+    public function buscarClientePorEmailESenha(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
@@ -155,12 +151,27 @@ class ClienteController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $cliente = Auth::user();
-            return response()->json($cliente);
-        } else {
-            return response()->json(['message' => 'Credenciais inválidas'], 401);
+        $cliente = Cliente::where('email', $request->email)
+            ->where('password', $request->password)
+            ->first();
+
+        if (!$cliente) {
+            return response()->json([
+                'message' => 'Cliente não encontrado ou credenciais inválidas',
+                'cliente_encontrado' => false
+            ], 404);
         }
+
+        return response()->json([
+            'message' => 'Cliente encontrado!',
+            'cliente_encontrado' => true,
+            'cliente' => [
+                'id' => $cliente->id,
+                'primeiro_nome' => $cliente->primeiro_nome,
+                'sobrenome' => $cliente->sobrenome,
+                'email' => $cliente->email,
+            ]
+        ]);
     }
 
     public function getLastId()

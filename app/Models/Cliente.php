@@ -5,10 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 
 class Cliente extends Model
-{
+{ 
     use HasFactory, Notifiable;
 
     protected $fillable = [
@@ -35,16 +34,7 @@ class Cliente extends Model
         'numero_cliente',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::saving(function ($model) {
-            if ($model->isDirty('password') && $model->password) {
-                $model->password = Hash::make($model->password);
-            }
-        });
-    }
+    // Removido o método boot() que fazia a criptografia da senha
 
     protected $hidden = [
         'password',
