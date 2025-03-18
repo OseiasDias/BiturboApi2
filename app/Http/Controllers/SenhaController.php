@@ -10,14 +10,12 @@ class SenhaController extends Controller
     // Criar uma nova senha
     public function store(Request $request)
     {
-        // Validação do campo senha
         $request->validate([
-            'password' => 'required|string|min:6',  // Senha deve ser string com no mínimo 6 caracteres
+            'password' => 'required|string|min:6',
         ]);
 
-        // Criando uma nova senha sem criptografia
         $senha = Senha::create([
-            'password' => $request->password, // Armazena a senha como string normal
+            'password' => $request->password, // Armazena a senha sem hash
         ]);
 
         return response()->json([
@@ -26,40 +24,32 @@ class SenhaController extends Controller
         ]);
     }
 
-    // Exibir a lista de senhas (Read)
+    // Exibir a lista de senhas
     public function index()
     {
-        $senhas = Senha::all();
-
         return response()->json([
-            'senhas' => $senhas,
+            'senhas' => Senha::all(),
         ]);
     }
 
-    // Exibir uma senha específica (Read)
+    // Exibir uma senha específica
     public function show($id)
     {
-        $senha = Senha::findOrFail($id);
-
         return response()->json([
-            'senha' => $senha,
+            'senha' => Senha::findOrFail($id),
         ]);
     }
 
-    // Atualizar uma senha existente (Update)
+    // Atualizar uma senha existente
     public function update(Request $request, $id)
     {
-        // Validação do campo senha
         $request->validate([
             'password' => 'required|string|min:6',
         ]);
 
-        // Encontrando a senha pelo ID
         $senha = Senha::findOrFail($id);
-
-        // Atualizando a senha sem criptografia
         $senha->update([
-            'password' => $request->password, // Armazena a senha como string normal
+            'password' => $request->password,
         ]);
 
         return response()->json([
@@ -68,7 +58,7 @@ class SenhaController extends Controller
         ]);
     }
 
-    // Deletar uma senha (Delete)
+    // Deletar uma senha
     public function destroy($id)
     {
         $senha = Senha::findOrFail($id);
@@ -79,29 +69,46 @@ class SenhaController extends Controller
         ]);
     }
 
-    // Verificar a senha (agora sem criptografia)
-    public function verifyPassword(Request $request, $id)
-    {
-        // Validação do campo senha
-        $request->validate([
-            'password' => 'required|string|min:6',
-        ]);
+    // Verificar a senha
+public function verifyPassword(Request $request, $id)
+{
+    $request->validate([
+        'password' => 'required|string|min:6',
+    ]);
 
-        try {
-            $senha = Senha::findOrFail($id);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Erro ao buscar senha no banco de dados.'], 500);
+    try {
+        $senha = Senha::where('id', $id)->first();
+
+        if (!$senha) {
+            return response()->json([
+                'sucesso' => false,
+                'message' => 'Registro de senha não encontrado.',
+            ], 404);
         }
 
-        // Comparação direta da senha sem hash
         if ($request->password === $senha->password) {
             return response()->json([
+                'sucesso' => true,
                 'message' => 'Senha verificada com sucesso!',
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Senha inválida!',
-            ], 400);
+                'id' => $senha->id, // Retorna o ID da senha verificada
+            ], 200);
         }
+
+        return response()->json([
+            'sucesso' => false,
+            'message' => 'Senha inválida!',
+        ], 401);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'sucesso' => false,
+            'message' => 'Erro interno ao processar a solicitação.',
+            'erro' => $e->getMessage(),
+        ], 500);
     }
+}
+
+
+
+
 }

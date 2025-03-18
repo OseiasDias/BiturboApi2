@@ -140,40 +140,6 @@ class ClienteController extends Controller
 
 
 
-    public function buscarClientePorEmailESenha(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
-
-        $cliente = Cliente::where('email', $request->email)
-            ->where('password', $request->password)
-            ->first();
-
-        if (!$cliente) {
-            return response()->json([
-                'message' => 'Cliente não encontrado ou credenciais inválidas',
-                'cliente_encontrado' => false
-            ], 404);
-        }
-
-        return response()->json([
-            'message' => 'Cliente encontrado!',
-            'cliente_encontrado' => true,
-            'cliente' => [
-                'id' => $cliente->id,
-                'primeiro_nome' => $cliente->primeiro_nome,
-                'sobrenome' => $cliente->sobrenome,
-                'email' => $cliente->email,
-            ]
-        ]);
-    }
-
     public function getLastId()
     {
         $ultimoCliente = Cliente::latest('id')->first();
@@ -194,4 +160,32 @@ class ClienteController extends Controller
 
         return response()->json($cliente);
     }
+
+
+    public function buscarClientePorCredenciais(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Campos inválidos'], 400);
+        }
+    
+        // Buscar o cliente pelo email e senha diretamente no banco de dados
+        $cliente = Cliente::where('email', $request->email)
+                          ->where('password', $request->password)
+                          ->first();
+    
+        if (!$cliente) {
+            return response()->json(['message' => 'Cliente não encontrado ou senha incorreta'], 404);
+        }
+    
+        return response()->json([
+            'message' => 'Cliente encontrado',
+            'cliente' => $cliente
+        ], 200);
+    }
+    
 }

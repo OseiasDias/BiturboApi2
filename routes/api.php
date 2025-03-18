@@ -85,7 +85,8 @@ Route::get('/senhas/{id}', [SenhaController::class, 'show']);  // Exibir uma sen
 Route::post('/senhas', [SenhaController::class, 'store']);  // Criar uma nova senha
 Route::put('/senhas/{id}', [SenhaController::class, 'update']);  // Atualizar uma senha existente
 Route::delete('/senhas/{id}', [SenhaController::class, 'destroy']);  // Deletar uma senha
-Route::post('/senhas/{id}/verificar', [SenhaController::class, 'verifyPassword']);
+//Route::post('/senhas/{id}/verificar', [SenhaController::class, 'verifyPassword']);
+Route::post('/verificarSenhaLogin/{id}', [SenhaController::class, 'verifyPassword']); // Verificar senha
 
 
 // Prefixo para as rotas relacionadas ao Footer
@@ -148,7 +149,7 @@ Route::post('/logout', [AdministradorController::class, 'logout']);
 
 // Rotas públicas
 Route::post('/administradores', [AdministradorController::class, 'store']);
-Route::post('/administradores/loginAdmin', [AdministradorController::class, 'login']);
+Route::post('/administradores/loginAdmin', [AdministradorController::class, 'buscarAdministradorPorCredenciais']);
 //Routes Para equipe de suporte
 Route::get('equipe-suporte', [EquipeSuporteController::class, 'index']); // Para listar todos
 Route::get('equipe-suporte/{id}', [EquipeSuporteController::class, 'show']); // Para mostrar um único registro
@@ -226,7 +227,7 @@ Route::put('clientes/{id}', [ClienteController::class, 'update']);
 Route::delete('clientes/{id}', [ClienteController::class, 'destroy']);
 //Route::post('clientes/login', [ClienteController::class, 'login']);
 Route::post('clientes/{id}/bloqueio', [ClienteController::class, 'toggleBloqueio']);
-Route::post('/clientes/login', [ClienteController::class, 'buscarClientePorEmailESenha']);
+Route::post('/clientes/loginClien', [ClienteController::class, 'buscarClientePorCredenciais']);
 
 Route::get('/clientesUltimos/last-id', [ClienteController::class, 'getLastId']);
 //Routes Produtos

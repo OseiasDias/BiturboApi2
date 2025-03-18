@@ -128,50 +128,33 @@ class AdministradorController extends Controller
         return response()->json(['message' => 'Administrador deletado com sucesso.']);
     }
 
-    // Método de login
-    public function login(Request $request)
+    public function buscarAdministradorPorCredenciais(Request $request)
     {
-        $credentials = $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string'
         ]);
     
-        // Buscar o administrador pelo e-mail
-        $admin = Administrador::where('email', $request->email)->first();
-    
-        if (!$admin || !Hash::check($request->password, $admin->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['As credenciais fornecidas estão incorretas.'],
-            ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Campos inválidos'], 400);
         }
     
-        // Gerar um token de autenticação
-        $token = $admin->createToken('adminToken')->plainTextToken;
+        // Buscar o administrador pelo email
+        $administrador = Administrador::where('email', $request->email)->first();
+    
+        // Comparação direta da senha sem Hash
+        if (!$administrador || $request->password !== $administrador->password) {
+            return response()->json(['message' => 'Administrador não encontrado ou senha incorreta'], 404);
+        }
     
         return response()->json([
-            'message' => 'Login realizado com sucesso!',
-            'admin' => $admin,
-            'token' => $token,
-        ]);
+            'message' => 'Administrador encontrado',
+            'administrador' => $administrador
+        ], 200);
     }
     
-    public function logout(Request $request)
-{
-    $request->user()->tokens()->delete();
-    return response()->json(['message' => 'Logout realizado com sucesso.']);
-}
-
-
-    // Recuperar a senha de um administrador pelo e-mail
-    public function getPasswordByEmail($email)
-    {
-        $admin = Administrador::where('email', $email)->first();
     
-        if (!$admin) {
-            return response()->json(['message' => 'Administrador não encontrado'], 404);
-        }
-    
-        return response()->json(['password' => $admin->password]);
-    }
 
+
+  
 }
