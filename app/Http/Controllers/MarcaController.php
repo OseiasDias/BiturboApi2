@@ -2,99 +2,73 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrdemDeReparacao;
-use App\Models\Servico;
-use App\Models\OrdemDeReparacaoServico;
+use App\Models\Marca; // Certifique-se de importar o modelo correto
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
-class OrdemDeReparacaoServicoController extends Controller
+class MarcaController extends Controller
 {
-    // Retorna todos os serviços associados a uma ordem de reparação
-    public function index($ordemDeReparacaoId)
+    // Retorna todas as marcas cadastradas
+    public function index()
     {
-        $ordemDeReparacao = OrdemDeReparacao::find($ordemDeReparacaoId);
-
-        if (!$ordemDeReparacao) {
-            return response()->json(['message' => 'Ordem de reparação não encontrada'], 404);
-        }
-
-        // Retorna os serviços associados a esta ordem de reparação
-        $servicos = $ordemDeReparacao->servicos;
-
-        return response()->json($servicos);
+        $marcas = Marca::all();
+        return response()->json($marcas);
     }
 
-    // Associa serviços a uma ordem de reparação
-    public function store(Request $request, $ordemDeReparacaoId)
+    // Cadastra uma nova marca
+    public function store(Request $request)
     {
-        $ordemDeReparacao = OrdemDeReparacao::find($ordemDeReparacaoId);
-
-        if (!$ordemDeReparacao) {
-            return response()->json(['message' => 'Ordem de reparação não encontrada'], 404);
-        }
-
-        // Validação dos dados de entrada
-        $validator = Validator::make($request->all(), [
-            'servicos' => 'required|array', // Espera um array de IDs de serviços
-            'servicos.*' => 'exists:servicos,id', // Valida se os IDs dos serviços existem na tabela `servicos`
+        $request->validate([
+            'nome' => 'required|string|max:255|unique:marcas,nome',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
+        $marca = Marca::create([
+            'nome' => $request->nome,
+        ]);
 
-        // Associa os serviços à ordem de reparação
-        foreach ($request->servicos as $servicoId) {
-            OrdemDeReparacaoServico::create([
-                'ordem_de_reparacao_id' => $ordemDeReparacaoId,
-                'servico_id' => $servicoId,
-            ]);
-        }
-
-        return response()->json(['message' => 'Serviços associados à ordem de reparação com sucesso!'], 201);
+        return response()->json(['message' => 'Marca cadastrada com sucesso!', 'marca' => $marca], 201);
     }
 
-    // Retorna um serviço específico de uma ordem de reparação
-    public function show($ordemDeReparacaoId, $servicoId)
+    // Retorna uma marca específica
+    public function show($id)
     {
-        $ordemDeReparacao = OrdemDeReparacao::find($ordemDeReparacaoId);
+        $marca = Marca::find($id);
 
-        if (!$ordemDeReparacao) {
-            return response()->json(['message' => 'Ordem de reparação não encontrada'], 404);
+        if (!$marca) {
+            return response()->json(['message' => 'Marca não encontrada'], 404);
         }
 
-        $servico = OrdemDeReparacaoServico::where('ordem_de_reparacao_id', $ordemDeReparacaoId)
-            ->where('servico_id', $servicoId)
-            ->first();
-
-        if (!$servico) {
-            return response()->json(['message' => 'Serviço não encontrado para esta ordem de reparação'], 404);
-        }
-
-        return response()->json($servico);
+        return response()->json($marca);
     }
 
-    // Desassocia um serviço de uma ordem de reparação
-    public function destroy($ordemDeReparacaoId, $servicoId)
+    // Atualiza os dados de uma marca
+    public function update(Request $request, $id)
     {
-        $ordemDeReparacao = OrdemDeReparacao::find($ordemDeReparacaoId);
+        $marca = Marca::find($id);
 
-        if (!$ordemDeReparacao) {
-            return response()->json(['message' => 'Ordem de reparação não encontrada'], 404);
+        if (!$marca) {
+            return response()->json(['message' => 'Marca não encontrada'], 404);
         }
 
-        $ordemDeReparacaoServico = OrdemDeReparacaoServico::where('ordem_de_reparacao_id', $ordemDeReparacaoId)
-            ->where('servico_id', $servicoId)
-            ->first();
+        $request->validate([
+            'nome' => 'required|string|max:255|unique:marcas,nome,' . $id,
+        ]);
 
-        if (!$ordemDeReparacaoServico) {
-            return response()->json(['message' => 'Serviço não encontrado para esta ordem de reparação'], 404);
+        $marca->update(['nome' => $request->nome]);
+
+        return response()->json(['message' => 'Marca atualizada com sucesso!', 'marca' => $marca]);
+    }
+
+    // Exclui uma marca
+    public function destroy($id)
+    {
+        $marca = Marca::find($id);
+
+        if (!$marca) {
+            return response()->json(['message' => 'Marca não encontrada'], 404);
         }
 
-        // Desassocia o serviço
-        $ordemDeReparacaoServico->delete();
+        $marca->delete();
 
-        return response()->json(['message' => 'Serviço desassociado com sucesso!'], 200);
+        return response()->json(['message' => 'Marca excluída com sucesso!']);
     }
 }
