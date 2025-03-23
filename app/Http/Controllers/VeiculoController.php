@@ -149,4 +149,11 @@ public function getVeiculosByCliente($clienteId)
 
         return response()->json(['message' => 'Veículo excluído com sucesso']);
     }
+
+    public function contarVeiculos()
+{
+    $quantidade = Veiculo::count();
+    return response()->json(['total_veiculos' => $quantidade]);
+}
+
 }

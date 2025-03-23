@@ -155,6 +155,11 @@ public function getIdByNumeroFuncionario($numero_funcionario)
 
 
 
+public function contarFuncionarios()
+{
+    $quantidade = Funcionario::count();
+    return response()->json(['total_funcionarios' => $quantidade]);
+}
 
 
 }

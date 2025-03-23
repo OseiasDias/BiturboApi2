@@ -188,4 +188,11 @@ class ClienteController extends Controller
         ], 200);
     }
     
+
+    public function contarClientes()
+    {
+        $quantidade = Cliente::count();
+        return response()->json(['total_clientes' => $quantidade]);
+    }
+
 }

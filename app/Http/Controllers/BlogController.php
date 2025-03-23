@@ -123,4 +123,12 @@ public function update(Request $request, $id)
 
         return response()->json(['message' => 'Blog excluído com sucesso']);
     }
+
+
+    public function contarBlogs()
+{
+    $quantidade = Blog::count();
+    return response()->json(['total_blogs' => $quantidade]);
+}
+
 }

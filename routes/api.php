@@ -166,6 +166,7 @@ Route::get('blogs/{id}', [BlogController::class, 'show']); // Exibir um blog esp
 Route::post('blogs', [BlogController::class, 'store']); // Criar um novo blog
 Route::put('blogs/{id}', [BlogController::class, 'update']); // Atualizar um blog
 Route::delete('blogs/{id}', [BlogController::class, 'destroy']); // Excluir um blog
+Route::get('/blogsContar', [BlogController::class, 'contarBlogs']);
 
 
 
@@ -210,6 +211,7 @@ Route::get('funcionariosUltimo/ultimo-id', [FuncionarioController::class, 'getLa
 Route::get('funcionariosIdReturn/id/{numero_funcionario}', [FuncionarioController::class, 'getIdByNumeroFuncionario']);
 
 
+Route::get('/funcionariosContar', [FuncionarioController::class, 'contarFuncionarios']);
 
 
 
@@ -231,7 +233,7 @@ Route::post('/clientes/loginClien', [ClienteController::class, 'buscarClientePor
 
 Route::get('/clientesUltimos/last-id', [ClienteController::class, 'getLastId']);
 //Routes Produtos
-
+Route::get('/clientesContar', [ClienteController::class, 'contarClientes']);
 
 Route::prefix('produtos')->group(function () {
     Route::get('/', [ProdutoController::class, 'index']);  // Lista produtos
@@ -260,10 +262,12 @@ Route::prefix('veiculos')->group(function () {
     Route::post('/', [VeiculoController::class, 'store']);
     Route::put('/{id}', [VeiculoController::class, 'update']);
     Route::delete('/{id}', [VeiculoController::class, 'destroy']);
-    
+
     // Rota para obter todos os veículos de um cliente
     Route::get('/cliente/{clienteId}', [VeiculoController::class, 'getVeiculosByCliente']);
 });
+Route::get('/veiculosContar', [VeiculoController::class, 'contarVeiculos']);
+
 
 
 
@@ -288,11 +292,11 @@ Route::prefix('tipos-veiculos')->group(function () {
 
 
 // Rotas para a entidade Marca
-Route::get('/marcas', [MarcaController::class, 'index'])->name('marcas.index'); // Listar todas as marcas
-Route::post('/marcas', [MarcaController::class, 'store'])->name('marcas.store'); // Criar uma nova marca
-Route::get('/marcas/{id}', [MarcaController::class, 'show'])->name('marcas.show'); // Mostrar uma marca específica
-Route::put('/marcas/{id}', [MarcaController::class, 'update'])->name('marcas.update'); // Atualizar uma marca específica
-Route::delete('/marcas/{id}', [MarcaController::class, 'destroy'])->name('marcas.destroy'); // Deletar uma marca específica
+Route::get('/marcas', [MarcaController::class, 'index']); // Listar todas as marcas
+Route::post('/marcas', [MarcaController::class, 'store']); // Criar uma nova marca
+Route::get('/marcas/{id}', [MarcaController::class, 'show']); // Mostrar uma marca específica
+Route::put('/marcas/{id}', [MarcaController::class, 'update']); // Atualizar uma marca específica
+Route::delete('/marcas/{id}', [MarcaController::class, 'destroy']); // Deletar uma marca específica
 
 
 //Routes cores
