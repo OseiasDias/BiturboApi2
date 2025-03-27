@@ -79,9 +79,8 @@ Route::get('cronometros/ordens/ativas', [OrdemDeReparacaoCronometroTecnicoContro
 
 //Route::withoutMiddleware('throttle')->put('/cronometro/atualizar/{tecnico_id}/{numero_or}', [CronometroController::class, 'atualizarCronometroPorTecnicoEOr']);
 
-Route::middleware('throttle:5000,1')->put('/cronometro/atualizar/{tecnico_id}/{numero_or}', [CronometroController::class, 'atualizarCronometroPorTecnicoEOr']);
-
-
+// Ajustar o throttling para algo mais razoável
+Route::middleware('throttle:60,1')->put('/cronometro/atualizar/{tecnico_id}/{numero_or}', [CronometroController::class, 'atualizarCronometroPorTecnicoEOr']);
 
 // Rotas para a entidade Senha
 Route::get('/senhas', [SenhaController::class, 'index']);  // Listar todas as senhas

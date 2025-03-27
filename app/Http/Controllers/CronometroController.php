@@ -102,30 +102,34 @@ class CronometroController extends Controller
                 return response()->json($ordens);
             }
         
-            public function atualizarCronometroPorTecnicoEOr(Request $request, $tecnico_id, $numero_or)
-            {
-                $request->validate([
-                    'segundos_atual' => 'required|integer',
-                    'rodando' => 'required|boolean',
-                    'estado' => 'required|string'
-                ]);
-            
-                $cronometro = Cronometro::where('tecnico_id', $tecnico_id)
-                                        ->where('numero_or', $numero_or)
-                                        ->first();
-            
-                if (!$cronometro) {
-                    return response()->json(['message' => 'Cronômetro não encontrado.'], 404);
-                }
-            
-                $cronometro->update([
-                    'segundos_atual' => $request->segundos_atual,
-                    'rodando' => $request->rodando,
-                    'estado' => $request->estado
-                ]);
-            
-                return response()->json(['message' => 'Cronômetro atualizado com sucesso.', 'cronometro' => $cronometro]);
-            }
-            
+           // Controller ajustado
+public function atualizarCronometroPorTecnicoEOr(Request $request, $tecnico_id, $numero_or)
+{
+    $request->validate([
+        'segundos_atual' => 'required|integer',
+        'rodando' => 'required|boolean',
+        'estado' => 'sometimes|string' // Tornar opcional
+    ]);
+
+    $cronometro = Cronometro::where('tecnico_id', $tecnico_id)
+                            ->where('numero_or', $numero_or)
+                            ->firstOrFail();
+
+    $updateData = [
+        'segundos_atual' => $request->segundos_atual,
+        'rodando' => $request->rodando
+    ];
+
+    if ($request->has('estado')) {
+        $updateData['estado'] = $request->estado;
+    }
+
+    $cronometro->update($updateData);
+
+    return response()->json([
+        'message' => 'Cronômetro atualizado com sucesso.',
+        'cronometro' => $cronometro
+    ]);
+}
             
 }
