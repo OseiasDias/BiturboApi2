@@ -132,4 +132,32 @@ public function atualizarCronometroPorTecnicoEOr(Request $request, $tecnico_id, 
     ]);
 }
             
+
+public function obterSegundosAtuais($tecnico_id, $numero_or)
+{
+    $cronometro = Cronometro::where('tecnico_id', $tecnico_id)
+                            ->where('numero_or', $numero_or)
+                            ->first();
+
+    if (!$cronometro) {
+        return response()->json(['message' => 'Cronômetro não encontrado.'], 404);
+    }
+
+    return response()->json(['segundos_atual' => $cronometro->segundos_atual]);
+}
+
+public function obterSegundoFinal($tecnico_id, $numero_or)
+{
+    $cronometro = Cronometro::where('tecnico_id', $tecnico_id)
+                            ->where('numero_or', $numero_or)
+                            ->first();
+
+    if (!$cronometro) {
+        return response()->json(['message' => 'Cronômetro não encontrado.'], 404);
+    }
+
+    return response()->json(['segundo_final' => $cronometro->segundo_final]);
+}
+
+
 }
