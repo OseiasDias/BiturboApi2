@@ -73,7 +73,7 @@ Route::delete('cronometros/{id}', [CronometroController::class, 'destroy']);
 // Rota para atualizar o progresso e o estado do cronômetro
 Route::put('cronometros/{id}/progress', [CronometroController::class, 'updateProgress']);
 
-Route::get('cronometros/buscar/{numero_or}', [CronometroController::class, 'buscarPorNumeroOr']);
+Route::get('cronometrosBuscar/{numero_or}', [CronometroController::class, 'buscarPorNumeroOr']);
 
 Route::get('cronometros/ordens/ativas', [OrdemDeReparacaoCronometroTecnicoController::class, 'listarOrdensAtivas']);
 
